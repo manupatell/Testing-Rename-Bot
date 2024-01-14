@@ -25,10 +25,10 @@ async def video_info_handler(c: Client, m: Message):
     if (not m.reply_to_message) or (len(m.command) == 1):
         await m.reply_text(f"Reply to video with,\n/{m.command[0]} `--change-title` new title `--change-video-title` new video title `--change-audio-title` new audio title `--change-subtitle-title` new subtitle title `--change-file-name` new file name", True)
         return
-    title = None
-    video_title = None
-    audio_title = None
-    subtitle_title = None
+    title = await db.get_titles(m.from_user.id)
+    video_title = await db.get_titles(m.from_user.id)
+    audio_title = await db.get_titles(m.from_user.id)
+    subtitle_title = await db.get_titles(m.from_user.id)
     default_f_name = get_media_file_name(m.reply_to_message)
     new_file_name = f"{default_f_name.rsplit('.', 1)[0] if default_f_name else 'output'}.mkv"
     if len(m.command) <= 1:
