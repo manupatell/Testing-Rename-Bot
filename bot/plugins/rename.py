@@ -24,8 +24,7 @@ from bot.core.handlers.not_big import handle_not_big
 from bot.core.handlers.time_gap import check_time_gap
 from bot.core.handlers.big_rename import handle_big_rename
 
-
-@Client.on_message(filters.command(["rename", "r"]) & filters.private & ~filters.edited)
+@Client.on_callback_query(filters.regex('RenameFile'))
 async def rename_handler(c: Client, m: Message):
     # Checks
     if not m.from_user:
