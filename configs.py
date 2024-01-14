@@ -1,5 +1,3 @@
-# (c) @AbirHasan2005
-
 import os
 import logging
 
@@ -14,7 +12,7 @@ logging.basicConfig(
 class Config(object):
     API_ID = int(os.environ.get("API_ID", "11973721"))
     API_HASH = os.environ.get("API_HASH", "5264bf4663e9159565603522f58d3c18")
-    BOT_TOKEN = os.environ.get("BOT_TOKEN", "5965670031:AAG5eLQkC2DRvrswV635iWvnR8-kRfge5wo")
+    BOT_TOKEN = os.environ.get("BOT_TOKEN", "6809904281:AAGdbV-NFrCtnNhwhXoBuXdDJf-evqRUkec")
     DOWNLOAD_DIR = os.environ.get("DOWNLOAD_DIR", "./downloads")
     LOGGER = logging
     OWNER_ID = int(os.environ.get("OWNER_ID", 1391556668))
