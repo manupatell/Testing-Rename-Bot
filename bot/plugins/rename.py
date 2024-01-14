@@ -4,7 +4,7 @@ import traceback
 from bot.client import Client
 from pyrogram import filters
 from pyrogram.file_id import FileId
-from pyrogram.types import Message
+from pyrogram.types import Message, CallbackQuery
 from bot.core.file_info import (
     get_media_file_id,
     get_media_file_size,
@@ -21,11 +21,11 @@ from bot.core.handlers.time_gap import check_time_gap
 from bot.core.handlers.big_rename import handle_big_rename
 
 @Client.on_callback_query(filters.regex('RenameFile'))
-async def rename_handler(c: Client, m: Message):
+async def rename_handler(c: Client, query: CallbackQuery):
     # Checks
-    if not m.from_user:
+    if not query.from_user:
         return await m.reply_text("I don't know about you sar :(")
-    if m.from_user.id not in Config.PRO_USERS:
+    if query.from_user.id not in Config.PRO_USERS:
         is_in_gap, sleep_time = await check_time_gap(m.from_user.id)
         if is_in_gap:
             await m.reply_text(f"Sorry Sir,\nNo Flooding Allowed!\n\nSend After `{str(sleep_time)}s` !!", quote=True)
