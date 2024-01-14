@@ -18,6 +18,7 @@ class Database:
             apply_caption=True,
             upload_as_doc=False,
             thumbnail=None,
+            titles=None,
             caption=None
         )
 
@@ -67,9 +68,15 @@ class Database:
         user = await self.col.find_one({'id': int(id)})
         return user.get('caption', None)
 
+    async def set_titles(self, id, titles):
+        await self.col.update_one({'id': id}, {'$set': {'titles': titles}})
+
+    async def get_titles(self, id):
+        user = await self.col.find_one({'id': int(id)})
+        return user.get('titles', None)
+
     async def get_user_data(self, id) -> dict:
         user = await self.col.find_one({'id': int(id)})
         return user or None
-
 
 db = Database(Config.MONGODB_URI, "Rename-Bot")
