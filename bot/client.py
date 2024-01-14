@@ -4,6 +4,8 @@ from pyrogram import Client as RawClient
 from pyrogram.storage import Storage
 from configs import Config
 from bot.core.new import New
+from aiohttp import web
+from bot.route import web_server
 
 LOGGER = Config.LOGGER
 log = LOGGER.getLogger(__name__)
