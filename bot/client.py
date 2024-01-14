@@ -1,5 +1,3 @@
-# (c) @AbirHasan2005
-
 from typing import Union
 from pyromod import listen
 from pyrogram import Client as RawClient
@@ -27,6 +25,10 @@ class Client(RawClient, New):
 
     async def start(self):
         await super().start()
+        if Config.WEBHOOK:
+            app = web.AppRunner(await web_server())
+            await app.setup()       
+            await web.TCPSite(app, "0.0.0.0", 8080).start()
         log.info("Bot Started!")
 
     async def stop(self, *args):
