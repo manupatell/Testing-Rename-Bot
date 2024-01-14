@@ -38,9 +38,6 @@ async def rename_handler(c: Client, m: Message):
                                quote=True)
             return
     await add_user_to_database(c, m)
-    if (not m.reply_to_message) or (not m.reply_to_message.media) or (not get_file_attr(m.reply_to_message)):
-        return await m.reply_text("Reply to any document/video/audio to rename it!", quote=True)
-
     # Proceed
     editable = await m.reply_text("Now send me new file name!", quote=True)
     user_input_msg: Message = await c.listen(m.chat.id)
