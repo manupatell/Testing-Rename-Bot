@@ -1,5 +1,3 @@
-# (c) @AbirHasan2005
-
 from pyrogram import types
 from bot.client import Client
 from bot.core.db.database import db
@@ -11,7 +9,6 @@ from bot.core.file_info import (
 )
 from bot.core.display import humanbytes
 from bot.core.handlers.settings import show_settings
-
 
 @Client.on_callback_query()
 async def cb_handlers(c: Client, cb: "types.CallbackQuery"):
@@ -87,6 +84,37 @@ async def cb_handlers(c: Client, cb: "types.CallbackQuery"):
             await cb.answer()
             await cb.message.edit(
                 text=caption,
+                parse_mode="Markdown",
+                reply_markup=types.InlineKeyboardMarkup([[
+                    types.InlineKeyboardButton("Go Back", callback_data="showSettings")
+                ]])
+            )
+    elif cb.data == "setTitles":
+        await cb.answer()
+        await cb.message.edit("Okay,\n"
+                              "Send me your custom Titles.\n\n"
+                              "Press /cancel to cancel process.")
+        user_input_msg: "types.Message" = await c.listen(cb.message.chat.id)
+        if not user_input_msg.text:
+            await cb.message.edit("Process Cancelled!")
+            return await user_input_msg.continue_propagation()
+        if user_input_msg.text and user_input_msg.text.startswith("/"):
+            await cb.message.edit("Process Cancelled!")
+            return await user_input_msg.continue_propagation()
+        await db.set_titles(cb.from_user.id, user_input_msg.text.markdown)
+        await cb.message.edit("Custom Titles Added Successfully!",
+                              reply_markup=types.InlineKeyboardMarkup(
+                                  [[types.InlineKeyboardButton("Show Settings",
+                                                               callback_data="showSettings")]]
+                              ))
+    elif cb.data == "showTitles":
+        titles = await db.get_titles(cb.from_user.id)
+        if not titles:
+            await cb.answer("You didn't set any custom Titles!", show_alert=True)
+        else:
+            await cb.answer()
+            await cb.message.edit(
+                text=titles,
                 parse_mode="Markdown",
                 reply_markup=types.InlineKeyboardMarkup([[
                     types.InlineKeyboardButton("Go Back", callback_data="showSettings")
