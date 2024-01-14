@@ -32,7 +32,11 @@ async def show_settings(m: "types.Message"):
                                     callback_data="setThumbnail")]
     ]
     if thumbnail:
-        buttons_markup.append([types.InlineKeyboardButton("Show Thumbnail", callback_data="showThumbnail")])
+        buttons_markup.append([types.InlineKeyboardButton("Show Thumbnail",
+                                                          callback_data="showThumbnail")])
+    if titles:
+        buttons_markup.append([types.InlineKeyboardButton("Show Titles",
+                                                          callback_data="showTitles")])
     if caption:
         buttons_markup.append([types.InlineKeyboardButton("Show Caption",
                                                           callback_data="showCaption")])
@@ -41,7 +45,7 @@ async def show_settings(m: "types.Message"):
 
     try:
         await m.edit(
-            text="**Here you can setup your Settings:**",
+            text="**Here You Can setup Your ⚙️ Settings:**",
             reply_markup=types.InlineKeyboardMarkup(buttons_markup),
             disable_web_page_preview=True,
             parse_mode="Markdown"
