@@ -16,6 +16,7 @@ async def show_settings(m: "types.Message"):
     caption = user_data.get("caption", None)
     apply_caption = user_data.get("apply_caption", True)
     thumbnail = user_data.get("thumbnail", None)
+    titles = user_data.get("titles", None)
     buttons_markup = [
         [types.InlineKeyboardButton(f"Upload as Doc {'✅' if upload_as_doc else '❌'}",
                                     callback_data="triggerUploadMode")],
@@ -25,12 +26,13 @@ async def show_settings(m: "types.Message"):
                                     callback_data="triggerApplyDefaultCaption")],
         [types.InlineKeyboardButton("Set Custom Caption",
                                     callback_data="setCustomCaption")],
+        [types.InlineKeyboardButton("Set Titles",
+                                    callback_data="setTitles")],
         [types.InlineKeyboardButton(f"{'Change' if thumbnail else 'Set'} Thumbnail",
                                     callback_data="setThumbnail")]
     ]
     if thumbnail:
-        buttons_markup.append([types.InlineKeyboardButton("Show Thumbnail",
-                                                          callback_data="showThumbnail")])
+        buttons_markup.append([types.InlineKeyboardButton("Show Thumbnail", callback_data="showThumbnail")])
     if caption:
         buttons_markup.append([types.InlineKeyboardButton("Show Caption",
                                                           callback_data="showCaption")])
@@ -39,7 +41,7 @@ async def show_settings(m: "types.Message"):
 
     try:
         await m.edit(
-            text="**Here you can setup your settings:**",
+            text="**Here you can setup your Settings:**",
             reply_markup=types.InlineKeyboardMarkup(buttons_markup),
             disable_web_page_preview=True,
             parse_mode="Markdown"
