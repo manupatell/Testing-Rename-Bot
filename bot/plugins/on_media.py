@@ -21,7 +21,7 @@ async def on_media_handler(c: Client, m: "types.Message"):
         reply_markup=types.InlineKeyboardMarkup(
             [[types.InlineKeyboardButton("Edit Metadata", callback_data="EditMetadata"),
               types.InlineKeyboardButton("Rename File", callback_data="RenameFile"),
-              types.InlineKeyboardButton("Media Information", callback_data="showFileInfo")
+              types.InlineKeyboardButton("Media Information", callback_data="showFileInfo"),
               types.InlineKeyboardButton("Not Now", callback_data="closeMessage")]]
         ),
         disable_web_page_preview=True,
