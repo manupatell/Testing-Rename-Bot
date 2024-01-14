@@ -19,11 +19,11 @@ from bot.core.db.add import add_user_to_database
 from bot.core.display import progress_for_pyrogram
 from bot.core.file_info import get_file_attr
 
-@Client.on_message(filters.command("video_info") & filters.private & ~filters.edited)
-async def video_info_handler(c: Client, m: Message):
+@Client.on_message(filters.command("edit_metadata") & filters.private & ~filters.edited)
+async def Edit_Metadata(c: Client, m: Message):
     await add_user_to_database(c, m)
     if (not m.reply_to_message) or (len(m.command) == 1):
-        await m.reply_text(f"Reply to video with,\n/{m.command[0]} `--change-title` new title `--change-video-title` new video title `--change-audio-title` new audio title `--change-subtitle-title` new subtitle title `--change-file-name` new file name", True)
+        await m.reply_text(f"Reply to video with,\n/{m.command[0]}", True)
         return
     title = (await db.get_titles(user_id)) or "StarMovies.hop.sh"
     video_title = (await db.get_titles(user_id)) or "StarMovies.hop.sh"
