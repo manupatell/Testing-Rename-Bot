@@ -11,7 +11,7 @@ import requests
 from urllib.parse import urlparse
 from pyrogram import enums
 from datetime import datetime
-from config import *
+from configs import *
 from Script import script
 from bot.plugins.thumbnail import *
 logging.getLogger("pyrogram").setLevel(logging.WARNING)
