@@ -6,7 +6,7 @@ logger = logging.getLogger(__name__)
 import os
 import time
 import requests
-from bot.core.db.database.utils import humanbytes
+from bot.core.display import humanbytes
 
 def DetectFileSize(url):
     r = requests.get(url, allow_redirects=True, stream=True)
