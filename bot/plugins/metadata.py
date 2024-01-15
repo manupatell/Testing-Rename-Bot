@@ -22,11 +22,12 @@ from bot.core.file_info import get_file_attr
 @Client.on_message(filters.command("edit_metadata") & filters.private & ~filters.edited)
 async def Edit_Metadata(c: Client, m: Message):
     default_f_name = get_media_file_name(m.reply_to_message)
+    title = (await db.get_titles(m.from_user.id)) or "StarMovies.hop.sh"
     await add_user_to_database(c, m)
     if (not m.reply_to_message) or (len(m.command) == 1):
         await m.reply_text(f"Reply to video with,\n/{m.command[0]}", True)
         return
-    editable = await m.reply_text("Now send me new file name!", quote=True)
+    editable = await m.reply_text("Now send me new file name! Current Title is {title}", quote=True)
     user_input_msg: Message = await c.listen(m.chat.id)
     if user_input_msg.text is None:
         await editable.edit("Process Cancelled!")
@@ -39,14 +40,7 @@ async def Edit_Metadata(c: Client, m: Message):
     else:
         new_file_name = user_input_msg.text[:255]
     await editable.edit("Please Wait ...")
-    title = (await db.get_titles(m.from_user.id)) or "StarMovies.hop.sh"
     newfile_name = f"{default_f_name.rsplit('.', 1)[0] if default_f_name else 'output'}.mkv"
-    if len(m.command) <= 1:
-        return
-    flags = [i.strip() for i in m.text.split('')]
-    for f in flags:
-        if " " in f:
-            title = f[len("title"):].strip()
     file_type = m.reply_to_message.video or m.reply_to_message.document
     if not file_type.mime_type.startswith("video/"):
         await m.reply_text("This is not a Video!", True)
