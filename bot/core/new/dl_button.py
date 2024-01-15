@@ -11,10 +11,10 @@ import requests
 import math
 import time
 from urllib.parse import urlparse
-from config import *
+from configs import *
 from datetime import datetime
 from Script import script
-from bot.plugins.thumbnail import *
+from bot.plugins.url_thumbnail import *
 from pyrogram import enums
 from bot.core.db.database import db
 logging.getLogger("pyrogram").setLevel(logging.WARNING)
