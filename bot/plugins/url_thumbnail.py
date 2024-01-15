@@ -19,7 +19,7 @@ from configs import DOWNLOAD_LOCATION, AUTH_CHANNEL
 from bot.core.db.database import db
 from bot.core.handlers.settings import *
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup, Message, CallbackQuery, ForceReply
-from bot.core.new..forcesub import handle_force_subscribe
+from bot.core.new.forcesub import handle_force_subscribe
 from bot.core.db.add import add_user_to_database
 
 @Client.on_message(filters.private & filters.command(['view_thumb','view_thumbnail','vt']))
