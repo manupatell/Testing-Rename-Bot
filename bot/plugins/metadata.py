@@ -24,7 +24,7 @@ async def Edit_Metadata(c: Client, m: Message):
     default_f_name = get_media_file_name(m.reply_to_message)
     title = (await db.get_titles(m.from_user.id)) or "StarMovies.hop.sh"
     await add_user_to_database(c, m)
-    if (not m.reply_to_message) or (len(m.command) == 1):
+    if not m.reply_to_message:
         await m.reply_text(f"Reply to video with,\n/{m.command[0]}", True)
         return
     editable = await m.reply_text("Now send me new file name! Current Title is {title}", quote=True)
