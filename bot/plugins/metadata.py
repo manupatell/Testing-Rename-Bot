@@ -32,8 +32,6 @@ async def Edit_Metadata(c: Client, m: Message):
         return
     flags = [i.strip() for i in m.text.split(' ')]
     for f in flags:
-        if "|" in f:
-            new_file_name = f[len("|"):].strip().rsplit(".", 1)[0] + ".mkv"
         if "title" in f:
             title = f[len("title"):].strip()
     file_type = m.reply_to_message.video or m.reply_to_message.document
