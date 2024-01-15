@@ -26,11 +26,16 @@ async def Edit_Metadata(c: Client, m: Message):
         await m.reply_text(f"Reply to video with,\n/{m.command[0]}", True)
         return
     title = (await db.get_titles(user_id)) or "StarMovies.hop.sh"
-    video_title = (await db.get_titles(user_id)) or "StarMovies.hop.sh"
-    audio_title = (await db.get_titles(user_id)) or "StarMovies.hop.sh"
-    subtitle_title = (await db.get_titles(user_id)) or "StarMovies.hop.sh"
     default_f_name = get_media_file_name(m.reply_to_message)
     new_file_name = f"{default_f_name.rsplit('.', 1)[0] if default_f_name else 'output'}.mkv"
+    if len(m.command) <= 1:
+        return
+    flags = [i.strip() for i in m.text.split(' ')]
+    for f in flags:
+        if "|" in f:
+            new_file_name = f[len("|"):].strip().rsplit(".", 1)[0] + ".mkv"
+        if "title" in f:
+            title = f[len("title"):].strip()
     file_type = m.reply_to_message.video or m.reply_to_message.document
     if not file_type.mime_type.startswith("video/"):
         await m.reply_text("This is not a Video!", True)
@@ -63,12 +68,12 @@ async def Edit_Metadata(c: Client, m: Message):
         if title:
             middle_cmd += f' -metadata title="{title}"'
         for stream in details["streams"]:
-            if (stream["codec_type"] == "video") and video_title:
-                middle_cmd += f' -metadata:s:{stream["index"]} title="{video_title}"'
-            elif (stream["codec_type"] == "audio") and audio_title:
-                middle_cmd += f' -metadata:s:{stream["index"]} title="{audio_title}"'
-            elif (stream["codec_type"] == "subtitle") and subtitle_title:
-                middle_cmd += f' -metadata:s:{stream["index"]} title="{subtitle_title}"'
+            if (stream["codec_type"] == "video") and title:
+                middle_cmd += f' -metadata:s:{stream["index"]} title="{title}"'
+            elif (stream["codec_type"] == "audio") and title:
+                middle_cmd += f' -metadata:s:{stream["index"]} title="{title}"'
+            elif (stream["codec_type"] == "subtitle") and title:
+                middle_cmd += f' -metadata:s:{stream["index"]} title="{title}"'
         dl_loc = dl_loc + str(time.time()).replace(".", "") + "/"
         if not os.path.isdir(dl_loc):
             os.makedirs(dl_loc)
