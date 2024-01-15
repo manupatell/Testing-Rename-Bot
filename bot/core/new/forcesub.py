@@ -2,7 +2,7 @@ import asyncio
 from pyrogram import Client
 from pyrogram.errors import FloodWait, UserNotParticipant
 from pyrogram.types import Message, InlineKeyboardMarkup, InlineKeyboardButton
-from config import FORCESUB_CHANNEL
+from configs import FORCESUB_CHANNEL
 from pyrogram import enums
 
 async def handle_force_subscribe(bot, message):
