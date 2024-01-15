@@ -45,7 +45,7 @@ async def Edit_Metadata(c: Client, m: Message):
     if not file_type.mime_type.startswith("video/"):
         await m.reply_text("This is not a Video!", True)
         return
-    await editable.edit("Downloading Video ...", quote=True)
+    await editable.edit("Downloading Video ...")
     dl_loc = Config.DOWNLOAD_DIR + "/" + str(m.from_user.id) + "/" + str(m.message_id) + "/"
     root_dl_loc = dl_loc
     if not os.path.isdir(dl_loc):
