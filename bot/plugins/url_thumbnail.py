@@ -17,7 +17,7 @@ from pyrogram import filters
 from bot.core.ffmpeg import take_screen_shot
 from configs import DOWNLOAD_LOCATION, AUTH_CHANNEL
 from bot.core.db.database import db
-from plugins.settings.settings import *
+from bot.core.handlers.settings import *
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup, Message, CallbackQuery, ForceReply
 from bot.core.new..forcesub import handle_force_subscribe
 from bot.core.db.add import add_user_to_database
