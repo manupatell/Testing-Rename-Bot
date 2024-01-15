@@ -5,7 +5,6 @@ from pyrogram import types, errors
 from configs import Config
 from bot.core.db.database import db
 
-
 async def show_settings(m: "types.Message"):
     usr_id = m.chat.id
     user_data = await db.get_user_data(usr_id)
@@ -24,9 +23,9 @@ async def show_settings(m: "types.Message"):
                                     callback_data="triggerApplyCaption")],
         [types.InlineKeyboardButton(f"Apply Default Caption {'❌' if caption else '✅'}",
                                     callback_data="triggerApplyDefaultCaption")],
-        [types.InlineKeyboardButton("Set Custom Caption",
+        [types.InlineKeyboardButton(f"{'Change' if caption else 'Set'} Custom Caption",
                                     callback_data="setCustomCaption")],
-        [types.InlineKeyboardButton("Set Titles",
+        [types.InlineKeyboardButton(f"{'Change' if titles else 'Set'} Titles",
                                     callback_data="setTitles")],
         [types.InlineKeyboardButton(f"{'Change' if thumbnail else 'Set'} Thumbnail",
                                     callback_data="setThumbnail")]
