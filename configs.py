@@ -1,4 +1,4 @@
-import os, environ
+import os
 import logging
 
 logging.basicConfig(
@@ -24,18 +24,18 @@ class Config(object):
     FORCESUB_CHANNEL = os.environ.get("FORCESUB_CHANNEL", "Star_Bots_Tamil")
     BROADCAST_AS_COPY = bool(os.environ.get("BROADCAST_AS_COPY", "False"))
     WEBHOOK = bool(os.environ.get("WEBHOOK", True))
-    BANNED_USERS = set(int(x) for x in environ.get("BANNED_USERS", "").split())
+    BANNED_USERS = set(int(x) for x in os.environ.get("BANNED_USERS", "").split())
     DOWNLOAD_LOCATION = "./Downloads"
     MAX_FILE_SIZE = 4194304000
     TG_MAX_FILE_SIZE = 4194304000
     FREE_USER_MAX_FILE_SIZE = 4194304000
-    CHUNK_SIZE = int(environ.get("CHUNK_SIZE", 128))
-    HTTP_PROXY = environ.get("HTTP_PROXY", "")
+    CHUNK_SIZE = int(os.environ.get("CHUNK_SIZE", 128))
+    HTTP_PROXY = os.environ.get("HTTP_PROXY", "")
     OUO_IO_API_KEY = ""
     MAX_MESSAGE_LENGTH = 4096
     PROCESS_MAX_TIMEOUT = 0
     DEF_WATER_MARK_FILE = ""
     LOGGER = logging
-    lazydownloaders = [int(lazydownloaders) if id_pattern.search(lazydownloaders) else lazydownloaders for lazydownloaders in environ.get('PRIME_DOWNLOADERS', '1391556668').split()]
+    lazydownloaders = [int(lazydownloaders) if id_pattern.search(lazydownloaders) else lazydownloaders for lazydownloaders in os.environ.get('PRIME_DOWNLOADERS', '1391556668').split()]
     PRIME_DOWNLOADERS = (lazydownloaders) if lazydownloaders else []
     
