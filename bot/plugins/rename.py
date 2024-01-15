@@ -92,3 +92,4 @@ async def rename_handler(c: Client, m: Message):
         await editable.edit("Failed to Rename File!\n\n"
                             f"**Error:** `{err}`\n\n"
                             f"**Traceback:** `{traceback.format_exc()}`")
+        
