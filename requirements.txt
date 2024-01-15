@@ -10,3 +10,13 @@ hachoir
 mutagen
 psutil
 aiofiles
+beautifulsoup4
+gunicorn==20.1.0
+numpy
+yt-dlp==2023.11.16
+olefile
+loggers
+filetype
+tldextract
+lk21
+Flask==2.2.2
