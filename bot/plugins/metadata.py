@@ -25,7 +25,7 @@ async def Edit_Metadata(c: Client, m: Message):
     if (not m.reply_to_message) or (len(m.command) == 1):
         await m.reply_text(f"Reply to video with,\n/{m.command[0]}", True)
         return
-    title = (await db.get_titles(user_id)) or "StarMovies.hop.sh"
+    title = (await db.get_titles(m.from_user.id)) or "StarMovies.hop.sh"
     default_f_name = get_media_file_name(m.reply_to_message)
     new_file_name = f"{default_f_name.rsplit('.', 1)[0] if default_f_name else 'output'}.mkv"
     if len(m.command) <= 1:
