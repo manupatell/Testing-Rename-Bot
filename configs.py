@@ -22,6 +22,7 @@ class Config(object):
     MONGODB_URI = os.environ.get("MONGODB_URI", "mongodb+srv://KarthikMovies:KarthikUK007@cluster0.4l5byki.mongodb.net/?retryWrites=true&w=majority")
     LOG_CHANNEL = int(os.environ.get("LOG_CHANNEL", "-1001821439025"))
     FORCESUB_CHANNEL = os.environ.get("FORCESUB_CHANNEL", "Star_Bots_Tamil")
+    AUTH_CHANNEL = os.environ.get("AUTH_CHANNEL", "Star_Bots_Tamil")
     BROADCAST_AS_COPY = bool(os.environ.get("BROADCAST_AS_COPY", "False"))
     WEBHOOK = bool(os.environ.get("WEBHOOK", True))
     BANNED_USERS = set(int(x) for x in os.environ.get("BANNED_USERS", "").split())
