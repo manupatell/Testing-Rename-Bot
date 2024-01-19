@@ -27,7 +27,7 @@ async def Edit_Metadata(c: Client, m: Message):
     if not m.reply_to_message:
         await m.reply_text(f"Reply to video with,\n/{m.command[0]}", True)
         return
-    editable = await m.reply_text("Now send me new file name! Current Title is {title}", quote=True)
+    editable = await m.reply_text(f"Now send me new file name! Current Title is {title}", quote=True)
     user_input_msg: Message = await c.listen(m.chat.id)
     if user_input_msg.text is None:
         await editable.edit("Process Cancelled!")
