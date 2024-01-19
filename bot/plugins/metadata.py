@@ -3,6 +3,7 @@ import time
 import json
 import shlex
 import shutil
+import aiohttp
 from bot.client import (
     Client
 )
