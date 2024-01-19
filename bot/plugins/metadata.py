@@ -48,6 +48,7 @@ async def Edit_Metadata(c: Client, m: Message):
     await editable.edit("Downloading Video ...")
     dl_loc = Config.DOWNLOAD_DIR + "/" + str(m.from_user.id) + "/" + str(m.message_id) + "/"
     root_dl_loc = dl_loc
+    stream = f"{dl_loc}{new_file_name}"
     if not os.path.isdir(dl_loc):
         os.makedirs(dl_loc)
     c_time = time.time()
@@ -93,7 +94,7 @@ async def Edit_Metadata(c: Client, m: Message):
         return
     try: os.remove(the_media)
     except: pass
-	file_size = os.path.getsize(output_vid)
+	file_size = os.path.getsize(stream)
 	if (int(file_size) > 2097152000) and (Config.ALLOW_UPLOAD_TO_STREAMTAPE is True) and (Config.STREAMTAPE_API_USERNAME != "NoNeed") and (Config.STREAMTAPE_API_PASS != "NoNeed"):
 		await editable.edit(f"Sorry Sir,\n\nFile Size Become {humanbytes(file_size)} !!\nI can't Upload to Telegram!\n\nSo Now Uploading to Streamtape ...")
 		try:
@@ -102,11 +103,11 @@ async def Edit_Metadata(c: Client, m: Message):
 				hit_api = await session.get(Main_API.format(Config.STREAMTAPE_API_USERNAME, Config.STREAMTAPE_API_PASS))
 				json_data = await hit_api.json()
 				temp_api = json_data["result"]["url"]
-				files = {'file1': open(output_vid, 'rb')}
+				files = {'file1': open(stream, 'rb')}
 				response = await session.post(temp_api, data=files)
 				data_f = await response.json(content_type=None)
 				download_link = data_f["result"]["url"]
-				filename = output_vid.split("/")[-1].replace("_"," ")
+				filename = stream.split("/")[-1].replace("_"," ")
 				text_edit = f"File Uploaded to Streamtape!\n\n**File Name:** `{filename}`\n**Size:** `{humanbytes(file_size)}`\n**Link:** `{download_link}`"
 				await editable.edit(text_edit, parse_mode="Markdown", disable_web_page_preview=True, reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton("Open Link", url=download_link)]]))
 				await logs_msg.edit("Successfully Uploaded File to Streamtape!\n\nI am Free Now!", parse_mode="Markdown", disable_web_page_preview=True)
@@ -114,7 +115,7 @@ async def Edit_Metadata(c: Client, m: Message):
 			print(f"Error: {e}")
 			await editable.edit("Sorry, Something went wrong!\n\nCan't Upload to Streamtape. You can report at [Support Group](https://t.me/linux_repo).")
 			await logs_msg.edit(f"Got Error While Uploading to Streamtape!\n\nError: {e}")
-		await delete_all()
+		await rm_dir(root_dl_loc)
 		return
     upload_as_doc = await db.get_upload_as_doc(m.from_user.id)
     _default_thumb_ = await db.get_thumbnail(m.from_user.id)
