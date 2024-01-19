@@ -46,4 +46,7 @@ class Config(object):
     MONGODB_URI = os.environ.get("MONGODB_URI", "mongodb+srv://KarthikMovies:KarthikUK007@cluster0.4l5byki.mongodb.net/?retryWrites=true&w=majority")
     LOG_CHANNEL = int(os.environ.get("LOG_CHANNEL", "-1001821439025"))
     BROADCAST_AS_COPY = bool(os.environ.get("BROADCAST_AS_COPY", "False"))
+    ALLOW_UPLOAD_TO_STREAMTAPE = bool(os.environ.get("ALLOW_UPLOAD_TO_STREAMTAPE", True))
+	STREAMTAPE_API_PASS = os.environ.get("STREAMTAPE_API_PASS", "zM4WB3RxQeIogb")
+	STREAMTAPE_API_USERNAME = os.environ.get("STREAMTAPE_API_USERNAME", "d1cf7f6a67162eacdd77")
     WEBHOOK = bool(os.environ.get("WEBHOOK", True))
