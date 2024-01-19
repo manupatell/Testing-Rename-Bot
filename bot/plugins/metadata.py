@@ -110,11 +110,9 @@ async def Edit_Metadata(c: Client, m: Message):
 				filename = stream.split("/")[-1].replace("_"," ")
 				text_edit = f"File Uploaded to Streamtape!\n\n**File Name:** `{filename}`\n**Size:** `{humanbytes(file_size)}`\n**Link:** `{download_link}`"
 				await editable.edit(text_edit, parse_mode="Markdown", disable_web_page_preview=True, reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton("Open Link", url=download_link)]]))
-				await logs_msg.edit("Successfully Uploaded File to Streamtape!\n\nI am Free Now!", parse_mode="Markdown", disable_web_page_preview=True)
 		except Exception as e:
 			print(f"Error: {e}")
 			await editable.edit("Sorry, Something went wrong!\n\nCan't Upload to Streamtape. You can report at [Support Group](https://t.me/linux_repo).")
-			await logs_msg.edit(f"Got Error While Uploading to Streamtape!\n\nError: {e}")
 		await rm_dir(root_dl_loc)
 		return
     upload_as_doc = await db.get_upload_as_doc(m.from_user.id)
