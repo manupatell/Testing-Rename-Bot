@@ -1,4 +1,4 @@
-git+https://github.com/MKN-BOTZ/pyrogram
+Pyrogram==1.4.16
 TgCrypto
 aiohttp==3.8.4
 pyromod
