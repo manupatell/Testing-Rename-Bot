@@ -51,7 +51,7 @@ async def Edit_Metadata(c: Client, m: Message):
     await editable.edit("Please Wait ...")
     newfile_name = f"{default_f_name.rsplit('.', 1)[0] if default_f_name else 'output'}.mkv"
     await editable.edit("Downloading Video ...")
-    dl_loc = Config.DOWNLOAD_DIR + "/" + str(m.from_user.id) + "/" + str(m.message_id) + "/"
+    dl_loc = Config.DOWNLOAD_DIR + "/" + str(m.from_user.id) + "/" + str(m.chat.id) + "/"
     root_dl_loc = dl_loc
     stream = f"{dl_loc}{new_file_name}"
     if not os.path.isdir(dl_loc):
