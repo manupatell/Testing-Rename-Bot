@@ -20,15 +20,12 @@ from bot.core.db.add import add_user_to_database
 from bot.core.display import progress_for_pyrogram
 from bot.core.file_info import get_file_attr
 
-@Client.on_message(filters.command("edit_metadata") & filters.private & ~filters.edited)
+@Client.on_message((filters.video | filters.document) & ~filters.private & ~filters.edited)
 async def Edit_Metadata(c: Client, m: Message):
     default_f_name = get_media_file_name(m.reply_to_message)
     title = (await db.get_titles(m.from_user.id)) or "StarMovies.hop.sh"
     await add_user_to_database(c, m)
-    if not m.reply_to_message:
-        await m.reply_text(f"Reply to video with,\n/{m.command[0]}", True)
-        return
-    editable = await m.reply_text(f"Now send me new file name! Current Title is {title}", quote=True)
+    editable = await m.reply_text(f"**Current File Name :-** `{default_f_name}` \n**Current Title :-** `{title}` \n**Now Send me New File Name..!**", quote=True)
     user_input_msg: Message = await c.listen(m.chat.id)
     if user_input_msg.text is None:
         await editable.edit("Process Cancelled!")
