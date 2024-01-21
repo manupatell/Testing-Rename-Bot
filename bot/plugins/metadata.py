@@ -47,7 +47,7 @@ async def Edit_Metadata(c: Client, m: Message):
         await editable.edit("**Process Cancelled!**")
         return await user_input_msg.continue_propagation()
     if user_input_msg.text.rsplit(".", 1)[-1].lower() != default_f_name.rsplit(".", 1)[-1].lower():
-        file_name = user_input_msg.text.rsplit(".", 1)[0][:234] + "." + default_f_name.rsplit(".", 1)[-1].lower()
+        file_name = user_input_msg.text.rsplit(".", 1)[0][:255] + "." + default_f_name.rsplit(".", 1)[-1].lower()
     else:
         new_file_name = user_input_msg.text
     await editable.edit("Please Wait ...")
