@@ -1,5 +1,3 @@
-# (c) @AbirHasan2005
-
 import math
 import time
 import asyncio
@@ -7,6 +5,7 @@ import bot
 from typing import Union
 from pyrogram.types import Message, CallbackQuery
 from pyrogram.errors import FloodWait
+from pyrogram import enums
 
 PROGRESS = """
 ⏳ **Percentage:** `{0}%`
@@ -56,7 +55,7 @@ async def progress_for_pyrogram(
                         ud_type,
                         tmp
                     ),
-                    parse_mode='markdown'
+                    parse_mode=enums.ParseMode.MARKDOWN
                 )
             except AttributeError:
                 await bot.bot.edit_inline_caption(
@@ -65,7 +64,7 @@ async def progress_for_pyrogram(
                         ud_type,
                         tmp
                     ),
-                    parse_mode='markdown'
+                    parse_mode=enums.ParseMode.MARKDOWN
                 )
         except FloodWait as e:
             await asyncio.sleep(e.x)
