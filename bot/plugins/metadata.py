@@ -26,7 +26,7 @@ from bot.core.file_info import get_file_attr
 async def Edit_Metadata(c: Client, m: Message):
     default_f_name = get_media_file_name(m)
     title = (await db.get_titles(m.from_user.id)) or "StarMovies.hop.sh"
-    caption = await db.set_caption(m.from_user.id)
+    caption = await db.get_caption(m.from_user.id)
     if m.from_user.id not in Config.PRO_USERS:
         is_in_gap, sleep_time = await check_time_gap(m.from_user.id)
         if is_in_gap:
