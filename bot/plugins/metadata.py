@@ -84,7 +84,10 @@ async def Edit_Metadata(c: Client, m: Message):
         for stream in details["streams"]:
             if (stream["codec_type"] == "video") and title:
                 middle_cmd += f' -metadata:s:{stream["index"]} title="{title}"'
-            elif (stream["codec_type"] == "audio") and title:
+            elif stream["codec_type"] == "audio":
+                if ("language" in stream) and stream["language"].lower() == "tam":
+                tamil_found = True
+            if "title" not in stream:
                 middle_cmd += f' -metadata:s:{stream["index"]} title="{title}"'
             elif (stream["codec_type"] == "subtitle") and title:
                 middle_cmd += f' -metadata:s:{stream["index"]} title="{title}"'
