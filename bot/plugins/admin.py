@@ -1,6 +1,6 @@
 import shutil
 import psutil
-from pyrogram import filters
+from pyrogram import filters, enums
 from pyrogram.types import (
     Message
 )
@@ -27,7 +27,7 @@ async def status_handler(_, m: Message):
              f"**CPU Usage:** {cpu_usage}% \n"
              f"**RAM Usage:** {ram_usage}%\n\n"
              f"**Total Users in DB:** `{total_users}`",
-        parse_mode="Markdown",
+        parse_mode=enums.ParseMode.MARKDOWN,
         quote=True
     )
 
