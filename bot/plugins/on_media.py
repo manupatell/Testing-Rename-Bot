@@ -8,7 +8,7 @@ from pyrogram import (
     types
 )
 
-@Client.on_message((filters.video | filters.audio | filters.document) & ~filters.channel & ~filters.edited)
+@Client.on_message((filters.audio) & ~filters.channel & ~filters.edited)
 async def on_media_handler(c: Client, m: "types.Message"):
     if not m.from_user:
         return await m.reply_text("I Don't Know About you Bro/Sis..")
