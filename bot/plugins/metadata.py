@@ -24,7 +24,7 @@ from bot.core.file_info import get_file_attr
 async def Edit_Metadata(c: Client, m: Message):
     default_f_name = get_media_file_name(m)
     title = (await db.get_titles(m.from_user.id)) or "StarMovies.hop.sh"
-    caption = await db.
+    caption = await db.set_caption(m.from_user.id)
     await add_user_to_database(c, m)
     editable = await m.reply_text(f"**Current File Name :-** `{default_f_name}` \n**File Caption :-** {caption}\n**Current Title :-** `{title}` \n**You Can Change Your Settings from /settings Command.\nNow Send me New File Name..!**", quote=True)
     user_input_msg: Message = await c.listen(m.chat.id)
@@ -117,6 +117,14 @@ async def Edit_Metadata(c: Client, m: Message):
         _default_thumb_ = _m_attr.thumbs[0].file_id \
             if (_m_attr and _m_attr.thumbs) \
             else None
+    if c_caption:
+         try:
+             caption = c_caption.format(filename=new_file_name, filesize=humanize.naturalsize(media.file_size), duration=convert(duration))
+         except Exception as e:
+             await ms.edit(text=f"Your caption Error unexpected keyword ●> ({e})")
+             return 
+    else:
+        caption = f"**{new_file_name}**"
     if _default_thumb_:
         _default_thumb_ = await c.download_media(_default_thumb_, root_dl_loc)
     if (not upload_as_doc) and m.video:
