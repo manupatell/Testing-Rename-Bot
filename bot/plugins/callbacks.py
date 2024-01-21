@@ -89,10 +89,10 @@ async def cb_handlers(c: Client, cb: "types.CallbackQuery"):
                     types.InlineKeyboardButton("Go Back", callback_data="showSettings")
                 ]])
             )
-    elif cb.data == "setTitles":
+    elif cb.data == "setTitle":
         await cb.answer()
         await cb.message.edit("Okay,\n"
-                              "Send me your custom Titles.\n\n"
+                              "Send me your custom Title.\n\n"
                               "Press /cancel to cancel process.")
         user_input_msg: "types.Message" = await c.listen(cb.message.chat.id)
         if not user_input_msg.text:
@@ -101,13 +101,13 @@ async def cb_handlers(c: Client, cb: "types.CallbackQuery"):
         if user_input_msg.text and user_input_msg.text.startswith("/"):
             await cb.message.edit("Process Cancelled!")
             return await user_input_msg.continue_propagation()
-        await db.set_titles(cb.from_user.id, user_input_msg.text.markdown)
-        await cb.message.edit("Custom Titles Added Successfully!",
+        await db.set_title(cb.from_user.id, user_input_msg.text.markdown)
+        await cb.message.edit("Custom Title Added Successfully!",
                               reply_markup=types.InlineKeyboardMarkup(
                                   [[types.InlineKeyboardButton("Show Settings",
                                                                callback_data="showSettings")]]
                               ))
-    elif cb.data == "showTitles":
+    elif cb.data == "showTitle":
         title = await db.get_title(cb.from_user.id)
         if not title:
             await cb.answer("You didn't set any custom Titles!", show_alert=True)
