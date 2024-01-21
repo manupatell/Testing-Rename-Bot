@@ -39,10 +39,10 @@ async def Edit_Metadata(c: Client, m: Message):
     editable = await m.reply_text(f"**Current File Name :-** `{default_f_name}` \n**File Caption :-** {caption}\n**Current Title :-** `{title}` \n**You Can Change Your Settings from /settings Command.\nNow Send me New File Name..!**", quote=True)
     user_input_msg: Message = await c.listen(m.chat.id)
     if user_input_msg.text is None:
-        await editable.edit("Process Cancelled!")
+        await editable.edit("**Process Cancelled!**")
         return await user_input_msg.continue_propagation()
     if user_input_msg.text and user_input_msg.text.startswith("/"):
-        await editable.edit("Process Cancelled!")
+        await editable.edit("**Process Cancelled!**")
         return await user_input_msg.continue_propagation()
     if user_input_msg.text.rsplit(".", 1)[-1].lower() != default_f_name.rsplit(".", 1)[-1].lower():
         file_name = user_input_msg.text.rsplit(".", 1)[0][:60] + "." + default_f_name.rsplit(".", 1)[-1].lower()
@@ -50,7 +50,7 @@ async def Edit_Metadata(c: Client, m: Message):
         new_file_name = user_input_msg.text[:60]
     await editable.edit("Please Wait ...")
     newfile_name = f"{default_f_name.rsplit('.', 1)[0] if default_f_name else 'output'}.mkv"
-    await editable.edit("Downloading Video ...")
+    await editable.edit("**Downloading Video...**")
     dl_loc = Config.DOWNLOAD_DIR + "/" + str(m.from_user.id) + "/" + str(m.chat.id) + "/"
     root_dl_loc = dl_loc
     stream = f"{dl_loc}{new_file_name}"
@@ -62,16 +62,16 @@ async def Edit_Metadata(c: Client, m: Message):
         file_name=dl_loc,
         progress=progress_for_pyrogram,
         progress_args=(
-            "Downloading ...",
+            "**Downloading...**",
             editable,
             c_time
         )
     )
-    await editable.edit("Trying to Fetch Media Metadata ...")
+    await editable.edit("**Trying to Fetch Media Metadata...**")
     output = await execute(f"ffprobe -hide_banner -show_streams -print_format json {shlex.quote(the_media)}")
     if not output:
         await rm_dir(root_dl_loc)
-        return await editable.edit("Can't fetch media info!")
+        return await editable.edit("**Can't Fetch Media Info!**")
 
     try:
         details = json.loads(output[0])
@@ -89,19 +89,19 @@ async def Edit_Metadata(c: Client, m: Message):
         if not os.path.isdir(dl_loc):
             os.makedirs(dl_loc)
         middle_cmd += f" {shlex.quote(dl_loc + new_file_name)}"
-        await editable.edit("Please Wait ...\n\nProcessing Video ...")
+        await editable.edit("**Please Wait ...\n\nProcessing Video...**")
         await execute(middle_cmd)
-        await editable.edit("Renamed Successfully!")
+        await editable.edit("**Renamed Successfully!**")
     except:
         # Clean Up
-        await editable.edit("Failed to process video!")
+        await editable.edit("**Failed to Process Video!**")
         await rm_dir(root_dl_loc)
         return
     try: os.remove(the_media)
     except: pass
     file_size = get_media_file_size(m)
     if (int(file_size) > 2097152000) and (Config.ALLOW_UPLOAD_TO_STREAMTAPE is True) and (Config.STREAMTAPE_API_USERNAME != "NoNeed") and (Config.STREAMTAPE_API_PASS != "NoNeed"):
-        await editable.edit(f"Sorry Sir,\n\nFile Size Become {file_size} !!\nI can't Upload to Telegram!\n\nSo Now Uploading to Streamtape ...")
+        await editable.edit(f"**Sorry Sir,\n\nFile Size Become {file_size} !!\nI Can't Upload to Telegram!\n\nSo Now Uploading to Streamtape...**")
         try:
             async with aiohttp.ClientSession() as session:
                 Main_API = "https://api.streamtape.com/file/ul?login={}&key={}"
@@ -117,7 +117,7 @@ async def Edit_Metadata(c: Client, m: Message):
                 await editable.edit(text_edit, parse_mode="Markdown", disable_web_page_preview=True, reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton("Open Link", url=download_link)]]))
         except Exception as e:
             print(f"Error: {e}")
-            await editable.edit("Sorry, Something went wrong!\n\nCan't Upload to Streamtape. You can report at [Support Group](https://t.me/linux_repo).")
+            await editable.edit("**Sorry, Something went Wrong!\n\nCan't Upload to Streamtape. You can Report at [Support Group](https://t.me/Star_Bots_Tamil).**")
         await rm_dir(root_dl_loc)
         return
     upload_as_doc = await db.get_upload_as_doc(m.from_user.id)
@@ -133,7 +133,7 @@ async def Edit_Metadata(c: Client, m: Message):
          try:
              caption = file_caption.format(file_name=new_file_name, file_size=file_size)
          except Exception as e:
-             await editable.edit(text=f"Your caption Error unexpected keyword ●> ({e})")
+             await editable.edit(text=f"**Your caption Error Unexpected Keyword ●> {e}**")
              return 
     else:
         caption = f"**{new_file_name}**"
