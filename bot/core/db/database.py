@@ -1,9 +1,6 @@
-# (c) @AbirHasan2005
-
 import datetime
 import motor.motor_asyncio
 from configs import Config
-
 
 class Database:
     def __init__(self, uri, database_name):
@@ -18,7 +15,7 @@ class Database:
             apply_caption=True,
             upload_as_doc=False,
             thumbnail=None,
-            titles=None,
+            title=None,
             caption=None
         )
 
@@ -68,12 +65,12 @@ class Database:
         user = await self.col.find_one({'id': int(id)})
         return user.get('caption', None)
 
-    async def set_titles(self, id, titles):
-        await self.col.update_one({'id': id}, {'$set': {'titles': titles}})
+    async def set_title(self, id, title):
+        await self.col.update_one({'id': id}, {'$set': {'title': title}})
 
-    async def get_titles(self, id):
+    async def get_title(self, id):
         user = await self.col.find_one({'id': int(id)})
-        return user.get('titles', None)
+        return user.get('title', None)
 
     async def get_user_data(self, id) -> dict:
         user = await self.col.find_one({'id': int(id)})
