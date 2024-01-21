@@ -14,6 +14,7 @@ from bot.core.file_info import (
     get_media_file_size,
     get_media_file_name
 )
+from bot.core.handlers.time_gap import check_time_gap
 from bot.core.db.database import db
 from bot.core.utils.rm import rm_dir
 from bot.core.utils.executor import execute
@@ -26,6 +27,14 @@ async def Edit_Metadata(c: Client, m: Message):
     default_f_name = get_media_file_name(m)
     title = (await db.get_titles(m.from_user.id)) or "StarMovies.hop.sh"
     caption = await db.set_caption(m.from_user.id)
+    if m.from_user.id not in Config.PRO_USERS:
+        is_in_gap, sleep_time = await check_time_gap(m.from_user.id)
+        if is_in_gap:
+            await m.reply_text("Sorry Sir,\n"
+                               "No Flooding Allowed!\n\n"
+                               f"Send After `{str(sleep_time)}s` !!",
+                               quote=True)
+            return
     await add_user_to_database(c, m)
     editable = await m.reply_text(f"**Current File Name :-** `{default_f_name}` \n**File Caption :-** {caption}\n**Current Title :-** `{title}` \n**You Can Change Your Settings from /settings Command.\nNow Send me New File Name..!**", quote=True)
     user_input_msg: Message = await c.listen(m.chat.id)
