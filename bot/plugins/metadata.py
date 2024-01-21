@@ -26,7 +26,7 @@ from bot.core.file_info import get_file_attr
 async def Edit_Metadata(c: Client, m: Message):
     default_f_name = get_media_file_name(m)
     title = (await db.get_titles(m.from_user.id)) or "StarMovies.hop.sh"
-    c_caption = await db.get_caption(m.from_user.id)
+    caption = await db.get_caption(m.from_user.id)
     if m.from_user.id not in Config.PRO_USERS:
         is_in_gap, sleep_time = await check_time_gap(m.from_user.id)
         if is_in_gap:
@@ -128,11 +128,12 @@ async def Edit_Metadata(c: Client, m: Message):
             if (_m_attr and _m_attr.thumbs) \
             else None
     file_size = get_media_file_size(m)
-    if c_caption:
+    file_caption = await db.get_caption(m.from_user.id)
+    if file_caption:
          try:
-             caption = c_caption.format(file_name=new_file_name, file_size=file_size)
+             caption = file_caption.format(file_name=new_file_name, file_size=file_size)
          except Exception as e:
-             await ms.edit(text=f"Your caption Error unexpected keyword ●> ({e})")
+             await editable.edit(text=f"Your caption Error unexpected keyword ●> ({e})")
              return 
     else:
         caption = f"**{new_file_name}**"
