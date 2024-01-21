@@ -114,7 +114,7 @@ async def Edit_Metadata(c: Client, m: Message):
                 download_link = data_f["result"]["url"]
                 filename = stream.split("/")[-1].replace("_"," ")
                 text_edit = f"File Uploaded to Streamtape!\n\n**File Name:** `{filename}`\n**Size:** `{naturalsize(file_size)}`\n**Link:** `{download_link}`"
-                await editable.edit(text_edit, parse_mode="Markdown", disable_web_page_preview=True, reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton("Open Link", url=download_link)]]))
+                await editable.edit(text_edit, parse_mode=enums.ParseMode.MARKDOWN, disable_web_page_preview=True, reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton("Open Link", url=download_link)]]))
         except Exception as e:
             print(f"Error: {e}")
             await editable.edit("**Sorry, Something went Wrong!\n\nCan't Upload to Streamtape. You can Report at [Support Group](https://t.me/Star_Bots_Tamil).**")
