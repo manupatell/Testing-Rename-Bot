@@ -110,7 +110,7 @@ async def cb_handlers(c: Client, cb: "types.CallbackQuery"):
     elif cb.data == "showTitle":
         title = await db.get_title(cb.from_user.id)
         if not title:
-            await cb.answer("You didn't set any custom Titles!", show_alert=True)
+            await cb.answer("You didn't set any custom Title!", show_alert=True)
         else:
             await cb.answer()
             await cb.message.edit(
