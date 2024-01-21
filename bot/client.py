@@ -3,15 +3,13 @@ from pyromod import listen
 from pyrogram import Client as RawClient
 from pyrogram.storage import Storage
 from configs import Config
-from bot.core.new import New
 from aiohttp import web
 from bot.route import web_server
 
 LOGGER = Config.LOGGER
 log = LOGGER.getLogger(__name__)
 
-
-class Client(RawClient, New):
+class Client(RawClient):
     """ Custom Bot Class """
 
     def __init__(self, session_name: Union[str, Storage] = "RenameBot"):
