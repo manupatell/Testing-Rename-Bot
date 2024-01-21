@@ -74,27 +74,18 @@ async def Edit_Metadata(c: Client, m: Message):
     if not output:
         await rm_dir(root_dl_loc)
         return await editable.edit("**Can't Fetch Media Info!**")
-
     try:
         details = json.loads(output[0])
         middle_cmd = f"ffmpeg -i {shlex.quote(the_media)} -c copy -map 0"
-        tamil_found = False
         if title:
             middle_cmd += f' -metadata title="{title}"'
         for stream in details["streams"]:
             if (stream["codec_type"] == "video") and title:
                 middle_cmd += f' -metadata:s:{stream["index"]} title="{title}"'
-            elif stream["codec_type"] == "audio":
-                if ("language" in stream) and stream["language"].lower() == "tam":
-                tamil_found = True
-            if "title" not in stream:
+            elif (stream["codec_type"] == "audio") and title:
                 middle_cmd += f' -metadata:s:{stream["index"]} title="{title}"'
             elif (stream["codec_type"] == "subtitle") and title:
                 middle_cmd += f' -metadata:s:{stream["index"]} title="{title}"'
-        middle_cmd += f' -vf "drawtext=text=\'{title}\':fontsize=24:box=1:boxcolor=black@0.5:boxborderw=5:x=(w-text_w)/2:y=(h-text_h)/2"'
-        middle_cmd += f' -map 0:a -map 0:s -c copy'
-        if not tamil_found:
-            middle_cmd += ' -map 0:a:0'
         dl_loc = dl_loc + str(time.time()).replace(".", "") + "/"
         if not os.path.isdir(dl_loc):
             os.makedirs(dl_loc)
