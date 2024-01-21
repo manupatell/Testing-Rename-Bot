@@ -19,7 +19,7 @@ from bot.core.db.database import db
 from bot.core.utils.rm import rm_dir
 from bot.core.utils.executor import execute
 from bot.core.db.add import add_user_to_database
-from bot.core.display import progress_for_pyrogram
+from bot.core.display import progress_for_pyrogram, convert
 from bot.core.file_info import get_file_attr
 
 @Client.on_message(filters.private & (filters.video | filters.document | filters.audio))
@@ -131,7 +131,7 @@ async def Edit_Metadata(c: Client, m: Message):
     file_caption = await db.get_caption(m.from_user.id)
     if file_caption:
          try:
-             caption = file_caption.format(file_name=new_file_name, file_size=file_size)
+             caption = file_caption.format(file_name=new_file_name, file_size=file_size, duration=convert(duration))
          except Exception as e:
              await editable.edit(text=f"**Your caption Error Unexpected Keyword ●> {e}**")
              return 
