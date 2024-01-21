@@ -24,8 +24,9 @@ from bot.core.file_info import get_file_attr
 async def Edit_Metadata(c: Client, m: Message):
     default_f_name = get_media_file_name(m)
     title = (await db.get_titles(m.from_user.id)) or "StarMovies.hop.sh"
+    caption = await db.
     await add_user_to_database(c, m)
-    editable = await m.reply_text(f"**Current File Name :-** `{default_f_name}` \n**Current Title :-** `{title}` \n**Now Send me New File Name..!**", quote=True)
+    editable = await m.reply_text(f"**Current File Name :-** `{default_f_name}` \n**File Caption :-** {caption}\n**Current Title :-** `{title}` \n**You Can Change Your Settings from /settings Command.\nNow Send me New File Name..!**", quote=True)
     user_input_msg: Message = await c.listen(m.chat.id)
     if user_input_msg.text is None:
         await editable.edit("Process Cancelled!")
