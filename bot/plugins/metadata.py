@@ -11,6 +11,7 @@ from configs import Config
 from pyrogram import filters
 from pyrogram.types import Message
 from bot.core.file_info import (
+    get_media_file_size,
     get_media_file_name
 )
 from bot.core.db.database import db
@@ -117,9 +118,10 @@ async def Edit_Metadata(c: Client, m: Message):
         _default_thumb_ = _m_attr.thumbs[0].file_id \
             if (_m_attr and _m_attr.thumbs) \
             else None
+    file_size = get_media_file_size(m)
     if c_caption:
          try:
-             caption = c_caption.format(filename=new_file_name, filesize=humanize.naturalsize(media.file_size), duration=convert(duration))
+             caption = c_caption.format(file_name=new_file_name, file_size=file_size)
          except Exception as e:
              await ms.edit(text=f"Your caption Error unexpected keyword ●> ({e})")
              return 
@@ -131,6 +133,7 @@ async def Edit_Metadata(c: Client, m: Message):
         await c.upload_video(
             chat_id=m.chat.id,
             video=f"{dl_loc}{new_file_name}",
+            caption=caption,
             thumb=_default_thumb_ or None,
             editable_message=editable,
         )
@@ -138,6 +141,7 @@ async def Edit_Metadata(c: Client, m: Message):
         await c.upload_document(
             chat_id=m.chat.id,
             document=f"{dl_loc}{new_file_name}",
+            caption=caption,
             editable_message=editable,
             thumb=_default_thumb_ or None
         )
