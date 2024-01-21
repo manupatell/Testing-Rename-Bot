@@ -26,8 +26,8 @@ class Client(RawClient):
 
     async def start(self):
         await super().start()
-        if not os.path.isdir(Config.DOWNLOAD_LOCATION):
-            os.makedirs(Config.DOWNLOAD_LOCATION)
+        if not os.path.isdir(Config.DOWNLOAD_DIR):
+            os.makedirs(Config.DOWNLOAD_DIR)
         if Config.WEBHOOK:
             app = web.AppRunner(await web_server())
             await app.setup()       
