@@ -8,7 +8,7 @@ from bot.client import (
     Client
 )
 from configs import Config
-from pyrogram import filters
+from pyrogram import filters, enums
 from pyrogram.types import Message
 from bot.core.file_info import (
     get_media_file_size,
@@ -25,7 +25,7 @@ from bot.core.file_info import get_file_attr
 @Client.on_message(filters.private & (filters.video | filters.document | filters.audio))
 async def Edit_Metadata(c: Client, m: Message):
     default_f_name = get_media_file_name(m)
-    title = (await db.get_titles(m.from_user.id)) or "StarMovies.hop.sh"
+    title = (await db.get_title(m.from_user.id)) or "StarMovies.hop.sh"
     caption = await db.get_caption(m.from_user.id)
     if m.from_user.id not in Config.PRO_USERS:
         is_in_gap, sleep_time = await check_time_gap(m.from_user.id)
