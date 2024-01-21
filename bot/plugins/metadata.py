@@ -99,9 +99,9 @@ async def Edit_Metadata(c: Client, m: Message):
         return
     try: os.remove(the_media)
     except: pass
-    file_size = os.path.getsize(stream)
+    file_size = get_media_file_size(m)
     if (int(file_size) > 2097152000) and (Config.ALLOW_UPLOAD_TO_STREAMTAPE is True) and (Config.STREAMTAPE_API_USERNAME != "NoNeed") and (Config.STREAMTAPE_API_PASS != "NoNeed"):
-        await editable.edit(f"Sorry Sir,\n\nFile Size Become {naturalsize(file_size)} !!\nI can't Upload to Telegram!\n\nSo Now Uploading to Streamtape ...")
+        await editable.edit(f"Sorry Sir,\n\nFile Size Become {file_size} !!\nI can't Upload to Telegram!\n\nSo Now Uploading to Streamtape ...")
         try:
             async with aiohttp.ClientSession() as session:
                 Main_API = "https://api.streamtape.com/file/ul?login={}&key={}"
