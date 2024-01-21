@@ -1,4 +1,4 @@
-Pyrogram==1.4.16
+Pyrogram==2.0.106
 TgCrypto
 aiohttp==3.8.4
 pyromod
