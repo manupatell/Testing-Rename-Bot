@@ -22,7 +22,7 @@ from bot.core.db.add import add_user_to_database
 from bot.core.display import progress_for_pyrogram
 from bot.core.file_info import get_file_attr
 
-@Client.on_message((filters.video | filters.document) & ~filters.private & ~filters.edited)
+@Client.on_message((filters.video | filters.document | filters.audio) & ~filters.private & ~filters.edited)
 async def Edit_Metadata(c: Client, m: Message):
     default_f_name = get_media_file_name(m)
     title = (await db.get_titles(m.from_user.id)) or "StarMovies.hop.sh"
