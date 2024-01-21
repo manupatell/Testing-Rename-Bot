@@ -13,7 +13,7 @@ log = LOGGER.getLogger(__name__)
 class Client(RawClient):
     """ Custom Bot Class """
 
-    def __init__(self, session_name: Union[str, Storage] = "RenameBot"):
+    def __init__(self, session_name: Union[str, Storage] = "MetadataEditorBot"):
         super().__init__(
             session_name,
             api_id=Config.API_ID,
