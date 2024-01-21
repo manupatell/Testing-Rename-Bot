@@ -131,7 +131,7 @@ async def Edit_Metadata(c: Client, m: Message):
             else None
     duration = 0
     try:
-        metadata = extractMetadata(createParser(file_path))
+        metadata = extractMetadata(createParser(dl_loc + new_file_name))
         if metadata.has("duration"):
            duration = metadata.get('duration').seconds
     except:
