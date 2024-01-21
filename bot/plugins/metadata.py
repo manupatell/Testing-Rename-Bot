@@ -153,15 +153,13 @@ async def Edit_Metadata(c: Client, m: Message):
             chat_id=m.chat.id,
             video=f"{dl_loc}{new_file_name}",
             caption=caption,
-            thumb=_default_thumb_ or None,
-            editable_message=editable,
+            thumb=_default_thumb_ or None
         )
     else:
         await c.send_document(
             chat_id=m.chat.id,
             document=f"{dl_loc}{new_file_name}",
             caption=caption,
-            editable_message=editable,
             thumb=_default_thumb_ or None
         )
     await rm_dir(root_dl_loc)
