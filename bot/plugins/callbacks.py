@@ -1,4 +1,4 @@
-from pyrogram import types
+from pyrogram import types, enums
 from bot.client import Client
 from bot.core.db.database import db
 from bot.core.file_info import (
@@ -84,7 +84,7 @@ async def cb_handlers(c: Client, cb: "types.CallbackQuery"):
             await cb.answer()
             await cb.message.edit(
                 text=caption,
-                parse_mode="Markdown",
+                parse_mode=enums.ParseMode.MARKDOWN,
                 reply_markup=types.InlineKeyboardMarkup([[
                     types.InlineKeyboardButton("Go Back", callback_data="showSettings")
                 ]])
@@ -108,14 +108,14 @@ async def cb_handlers(c: Client, cb: "types.CallbackQuery"):
                                                                callback_data="showSettings")]]
                               ))
     elif cb.data == "showTitles":
-        titles = await db.get_titles(cb.from_user.id)
-        if not titles:
+        title = await db.get_title(cb.from_user.id)
+        if not title:
             await cb.answer("You didn't set any custom Titles!", show_alert=True)
         else:
             await cb.answer()
             await cb.message.edit(
-                text=titles,
-                parse_mode="Markdown",
+                text=title,
+                parse_mode=enums.ParseMode.MARKDOWN,
                 reply_markup=types.InlineKeyboardMarkup([[
                     types.InlineKeyboardButton("Go Back", callback_data="showSettings")
                 ]])
@@ -138,7 +138,7 @@ async def cb_handlers(c: Client, cb: "types.CallbackQuery"):
                f"**File MimeType:** `{get_file_attr(replied_m).mime_type}`"
         await cb.message.edit(
             text=text,
-            parse_mode="Markdown",
+            parse_mode=enums.ParseMode.MARKDOWN,
             disable_web_page_preview=True,
             reply_markup=types.InlineKeyboardMarkup(
                 [[types.InlineKeyboardButton("Close Message", callback_data="closeMessage")]]
