@@ -1,13 +1,10 @@
-# (c) @AbirHasan2005
-
 from bot.client import Client
 from pyrogram import filters
 from pyrogram import types
 from bot.core.db.database import db
 from bot.core.db.add import add_user_to_database
 
-
-@Client.on_message(filters.command("show_thumbnail") & filters.private & ~filters.edited)
+@Client.on_message(filters.command("show_thumbnail") & filters.private)
 async def show_thumbnail(c: Client, m: "types.Message"):
     if not m.from_user:
         return await m.reply_text("I don't know about you sar :(")
@@ -22,7 +19,7 @@ async def show_thumbnail(c: Client, m: "types.Message"):
                        ))
 
 
-@Client.on_message(filters.command("set_thumbnail") & filters.private & ~filters.edited)
+@Client.on_message(filters.command("set_thumbnail") & filters.private)
 async def set_thumbnail(c: Client, m: "types.Message"):
     if (not m.reply_to_message) or (not m.reply_to_message.photo):
         return await m.reply_text("Reply to any image to save in as custom thumbnail!")
@@ -38,7 +35,7 @@ async def set_thumbnail(c: Client, m: "types.Message"):
                        ))
 
 
-@Client.on_message(filters.command("delete_thumbnail") & filters.private & ~filters.edited)
+@Client.on_message(filters.command("delete_thumbnail") & filters.private)
 async def delete_thumbnail(c: Client, m: "types.Message"):
     if not m.from_user:
         return await m.reply_text("I don't know about you sar :(")
