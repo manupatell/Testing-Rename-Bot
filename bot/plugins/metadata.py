@@ -21,6 +21,8 @@ from bot.core.utils.executor import execute
 from bot.core.db.add import add_user_to_database
 from bot.core.display import progress_for_pyrogram, convert
 from bot.core.file_info import get_file_attr
+from hachoir.metadata import extractMetadata
+from hachoir.parser import createParser
 
 @Client.on_message(filters.private & (filters.video | filters.document | filters.audio))
 async def Edit_Metadata(c: Client, m: Message):
@@ -127,6 +129,13 @@ async def Edit_Metadata(c: Client, m: Message):
         _default_thumb_ = _m_attr.thumbs[0].file_id \
             if (_m_attr and _m_attr.thumbs) \
             else None
+    duration = 0
+    try:
+        metadata = extractMetadata(createParser(file_path))
+        if metadata.has("duration"):
+           duration = metadata.get('duration').seconds
+    except:
+        pass
     file_size = get_media_file_size(m)
     file_caption = await db.get_caption(m.from_user.id)
     if file_caption:
