@@ -20,23 +20,24 @@ def get_media_file_name(message: Message):
 
 def get_media_file_size(message: Message):
     """
-    Pass Message object of audio or document or photo or sticker or video or animation or voice or video_note to get file_size.
+    Pass Message object of audio, document, photo, sticker, video, animation, voice, or video_note to get file_size.
     """
 
     media = message.audio or \
             message.document or \
-            message.photo or \
+            (message.photo[-1] if message.photo else None) or \
             message.sticker or \
             message.video or \
             message.animation or \
             message.voice or \
             message.video_note
 
-    if media and media.file_size:
+    if isinstance(media, dict) and 'file_size' in media:
+        return media['file_size']
+    elif hasattr(media, 'file_size'):
         return media.file_size
     else:
         return None
-
 
 def get_media_mime_type(message: Message):
     """
