@@ -1,7 +1,4 @@
-# (c) @AbirHasan2005
-
 from pyrogram.types import Message
-
 
 def get_media_file_name(message: Message):
     """
@@ -14,11 +11,12 @@ def get_media_file_name(message: Message):
             message.video or \
             message.animation
 
-    if media and media.file_name:
+    if isinstance(media, dict) and 'file_name' in media:
+        return media['file_name']
+    elif hasattr(media, 'file_name'):
         return media.file_name
     else:
         return None
-
 
 def get_media_file_size(message: Message):
     """
