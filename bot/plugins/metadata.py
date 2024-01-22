@@ -55,8 +55,7 @@ async def Edit_Metadata(c: Client, m: Message):
     await editable.edit("**Downloading Video...**")
     dl_loc = Config.DOWNLOAD_DIR + "/" + str(m.from_user.id) + "/"
     root_dl_loc = dl_loc
-    new_file_name = m.text
-    stream = f"{dl_loc}{new_file_name}"
+    stream = Config.DOWNLOAD_DIR + "/" + str(m.from_user.id) + "/" + f"{new_file_name}"
     if not os.path.isdir(dl_loc):
         os.makedirs(dl_loc)
     c_time = time.time()
@@ -101,7 +100,7 @@ async def Edit_Metadata(c: Client, m: Message):
         return
     try: os.remove(the_media)
     except: pass
-    file_size = get_media_file_size(m) # 2097152000
+    file_size = get_media_file_size(stream) # 2097152000
     if (int(file_size) > 10240) and (Config.ALLOW_UPLOAD_TO_STREAMTAPE is True) and (Config.STREAMTAPE_API_USERNAME != "NoNeed") and (Config.STREAMTAPE_API_PASS != "NoNeed"):
         await editable.edit(f"**Sorry Sir,\n\nFile Size Become {file_size} !!\nI Can't Upload to Telegram!\n\nSo Now Uploading to Streamtape...**")
         try:
