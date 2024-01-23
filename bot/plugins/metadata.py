@@ -55,7 +55,7 @@ async def Edit_Metadata(c: Client, m: Message):
     await editable.edit("**Downloading Video...**")
     dl_loc = Config.DOWNLOAD_DIR + "/" + str(m.from_user.id) + "/"
     root_dl_loc = dl_loc
-    stream = Config.DOWNLOAD_DIR + "/" + str(m.from_user.id) + "/" + f"{new_file_name}"
+    stream = os.path.join(dl_loc, new_file_name) # Config.DOWNLOAD_DIR + "/" + str(m.from_user.id) + "/", f"{new_file_name}"
     if not os.path.isdir(dl_loc):
         os.makedirs(dl_loc)
     c_time = time.time()
