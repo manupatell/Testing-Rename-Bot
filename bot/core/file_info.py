@@ -23,8 +23,7 @@ def get_media_file_size(message: Message):
     Pass Message object of audio, document, photo, sticker, video, animation, voice, or video_note to get file_size.
     """
 
-    media = message.audio or \
-            message.document or \
+    media = message.document or \
             (message.photo[-1] if message.photo else None) or \
             message.sticker or \
             message.video or \
