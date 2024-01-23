@@ -1,43 +1,5 @@
 from pyrogram.types import Message
 
-def get_media_file_name(message: Message):
-    """
-    Pass Message object of audio or document or sticker or video or animation to get file_name.
-    """
-
-    media = message.audio or \
-            message.document or \
-            message.sticker or \
-            message.video or \
-            message.animation
-
-    if isinstance(media, dict) and 'file_name' in media:
-        return media['file_name']
-    elif hasattr(media, 'file_name'):
-        return media.file_name
-    else:
-        return None
-
-def get_media_file_size(message: Message):
-    """
-    Pass Message object of audio, document, photo, sticker, video, animation, voice, or video_note to get file_size.
-    """
-
-    media = message.document or \
-            (message.photo[-1] if message.photo else None) or \
-            message.sticker or \
-            message.video or \
-            message.animation or \
-            message.voice or \
-            message.video_note
-
-    if isinstance(media, dict) and 'file_size' in media:
-        return media['file_size']
-    elif hasattr(media, 'file_size'):
-        return media.file_size
-    else:
-        return None
-
 def get_media_mime_type(message: Message):
     """
     Pass Message object of audio or document or video to get mime_type
@@ -51,7 +13,6 @@ def get_media_mime_type(message: Message):
         return media.mime_type
     else:
         return None
-
 
 def get_media_file_id(message: Message):
     """
@@ -71,7 +32,6 @@ def get_media_file_id(message: Message):
         return media.file_id
     else:
         return None
-
 
 def get_file_type(message: Message):
     if message.document:
