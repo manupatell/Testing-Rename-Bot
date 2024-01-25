@@ -15,8 +15,7 @@ PROGRESS = """
 🕰 **ETA:** `{4}`
 """
 
-
-async def progress_for_pyrogram(
+async def display_progress_for_pyrogram(
     current,
     total,
     ud_type,
