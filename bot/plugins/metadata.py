@@ -111,7 +111,7 @@ async def Edit_Metadata(c: Client, m: Message):
         return
     try: os.remove(the_media)
     except: pass
-    file_size = get_file_size(file_path=stream) # 2097152000
+    file_size = int(get_file_size(file_path=stream)) # 2097152000
     if (int(file_size) > 10240) and (Config.ALLOW_UPLOAD_TO_STREAMTAPE is True) and (Config.STREAMTAPE_API_USERNAME != "NoNeed") and (Config.STREAMTAPE_API_PASS != "NoNeed"):
         await editable.edit(f"**Sorry Sir,\n\nFile Size Become {file_size} !!\nI Can't Upload to Telegram!\n\nSo Now Uploading to Streamtape...**")
         try:
