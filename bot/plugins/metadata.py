@@ -19,7 +19,7 @@ from bot.core.db.database import db
 from bot.core.utils.rm import rm_dir
 from bot.core.utils.executor import execute
 from bot.core.db.add import add_user_to_database
-from bot.core.display import progress_for_pyrogram, convert
+from bot.core.display import display_progress_for_pyrogram, convert
 from bot.core.file_info import get_file_attr
 from hachoir.metadata import extractMetadata
 from hachoir.parser import createParser
@@ -55,14 +55,14 @@ async def Edit_Metadata(c: Client, m: Message):
     await editable.edit("**Downloading Video...**")
     dl_loc = Config.DOWNLOAD_DIR + "/" + str(m.from_user.id) + "/"
     root_dl_loc = dl_loc
-    stream = os.path.join(dl_loc, new_file_name) # Config.DOWNLOAD_DIR + "/" + str(m.from_user.id) + "/", f"{new_file_name}"
+    stream = dl_loc + new_file_name # Config.DOWNLOAD_DIR + "/" + str(m.from_user.id) + "/", f"{new_file_name}"
     if not os.path.isdir(dl_loc):
         os.makedirs(dl_loc)
     c_time = time.time()
     the_media = await c.download_media(
         message=m,
         file_name=dl_loc,
-        progress=progress_for_pyrogram,
+        progress=display_progress_for_pyrogram,
         progress_args=(
             "**Downloading...**",
             editable,
@@ -100,7 +100,7 @@ async def Edit_Metadata(c: Client, m: Message):
         return
     try: os.remove(the_media)
     except: pass
-    file_size = os.path.getsize(m) # 2097152000
+    file_size = get_media_file_size(stream) # 2097152000
     if (int(file_size) > 10240) and (Config.ALLOW_UPLOAD_TO_STREAMTAPE is True) and (Config.STREAMTAPE_API_USERNAME != "NoNeed") and (Config.STREAMTAPE_API_PASS != "NoNeed"):
         await editable.edit(f"**Sorry Sir,\n\nFile Size Become {file_size} !!\nI Can't Upload to Telegram!\n\nSo Now Uploading to Streamtape...**")
         try:
