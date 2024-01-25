@@ -32,7 +32,7 @@ def get_file_size(file_path, unit="MB"):
         while i < memory_size_unit_mapper[unit]:
             file_size = file_size / 1000.0
             i += 1
-        return file_size
+        return int(file_size)
     except OSError as e:
         print(f"Error in get_file_size: {e}")
         return None
