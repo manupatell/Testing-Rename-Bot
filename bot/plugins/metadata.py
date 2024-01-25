@@ -26,7 +26,7 @@ from hachoir.parser import createParser
 
 def get_file_size(file_path, unit="MB"):
     try:
-        file_size = os.path.getsize(file_path)
+        file_size = int(os.path.getsize(file_path))
         memory_size_unit_mapper = {"KB": 1, "MB": 2, "GB": 3, "TB": 4}
         i = 0
         while i < memory_size_unit_mapper[unit]:
