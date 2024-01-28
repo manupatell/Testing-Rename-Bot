@@ -166,7 +166,8 @@ async def Edit_Metadata(c: Client, m: Message):
             video=f"{dl_loc}{new_file_name}",
             caption=caption,
             duration=duration,
-            thumb=_default_thumb_ or None
+            thumb=_default_thumb_ or None,
+            editable_message=editable,
         )
     else:
         await c.send_document(
@@ -174,6 +175,7 @@ async def Edit_Metadata(c: Client, m: Message):
             document=f"{dl_loc}{new_file_name}",
             caption=caption,
             duration=duration,
-            thumb=_default_thumb_ or None
+            thumb=_default_thumb_ or None,
+            editable_message=editable,
         )
     await rm_dir(root_dl_loc)
