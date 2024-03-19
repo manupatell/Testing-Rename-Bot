@@ -105,13 +105,6 @@ async def Edit_Metadata(c: Client, m: Message):
         _default_thumb_ = _m_attr.thumbs[0].file_id \
             if (_m_attr and _m_attr.thumbs) \
             else None
-    duration = 0
-    try:
-        metadata = extractMetadata(createParser(dl_loc + new_file_name))
-        if metadata.has("duration"):
-           duration = metadata.get('duration').seconds
-    except:
-        pass
     file_size = get_media_file_size(m)
     file_caption = await db.get_caption(m.from_user.id)
     if file_caption:
