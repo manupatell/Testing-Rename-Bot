@@ -52,7 +52,7 @@ async def Edit_Metadata(c: Client, m: Message):
     the_media = await c.download_media(
         message=m,
         file_name=dl_loc,
-        progress=progress_for_pyrogram,
+        progress=display_progress_for_pyrogram,
         progress_args=(
             "Downloading ...",
             editable,
