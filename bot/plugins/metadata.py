@@ -24,19 +24,6 @@ from bot.core.file_info import get_file_attr
 from hachoir.metadata import extractMetadata
 from hachoir.parser import createParser
 
-def get_file_size(file_path, unit="MB"):
-    try:
-        file_size = int(os.path.getsize(file_path))
-        memory_size_unit_mapper = {"KB": 1, "MB": 2, "GB": 3, "TB": 4}
-        i = 0
-        while i < memory_size_unit_mapper[unit]:
-            file_size = file_size / 1000.0
-            i += 1
-        return int(file_size)
-    except OSError as e:
-        print(f"Error in get_file_size: {e}")
-        return None
-
 @Client.on_message(filters.private & (filters.video | filters.document | filters.audio))
 async def Edit_Metadata(c: Client, m: Message):
     default_f_name = get_media_file_name(m)
@@ -109,29 +96,6 @@ async def Edit_Metadata(c: Client, m: Message):
     except:
         # Clean Up
         await editable.edit("**Failed to Process Video!**")
-        await rm_dir(root_dl_loc)
-        return
-    try: os.remove(the_media)
-    except: pass
-    file_size = int(get_file_size(file_path=stream)) # 2097152000
-    if (int(file_size) > 10240) and (Config.ALLOW_UPLOAD_TO_STREAMTAPE is True) and (Config.STREAMTAPE_API_USERNAME != "NoNeed") and (Config.STREAMTAPE_API_PASS != "NoNeed"):
-        await editable.edit(f"**Sorry Sir,\n\nFile Size Become {file_size} !!\nI Can't Upload to Telegram!\n\nSo Now Uploading to Streamtape...**")
-        try:
-            async with aiohttp.ClientSession() as session:
-                Main_API = "https://api.streamtape.com/file/ul?login={}&key={}"
-                hit_api = await session.get(Main_API.format(Config.STREAMTAPE_API_USERNAME, Config.STREAMTAPE_API_PASS))
-                json_data = await hit_api.json()
-                temp_api = json_data["result"]["url"]
-                files = {'file1': open(stream, 'rb')}
-                response = await session.post(temp_api, data=files)
-                data_f = await response.json(content_type=None)
-                download_link = data_f["result"]["url"]
-                filename = stream.split("/")[-1].replace("_"," ")
-                text_edit = f"File Uploaded to Streamtape!\n\n**File Name:** `{filename}`\n**Size:** `{naturalsize(file_size)}`\n**Link:** `{download_link}`"
-                await editable.edit(text_edit, parse_mode=enums.ParseMode.MARKDOWN, disable_web_page_preview=True, reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton("Open Link", url=download_link)]]))
-        except Exception as e:
-            print(f"Error: {e}")
-            await editable.edit("**Sorry, Something went Wrong!\n\nCan't Upload to Streamtape. You can Report at [Support Group](https://t.me/Star_Bots_Tamil).**")
         await rm_dir(root_dl_loc)
         return
     upload_as_doc = await db.get_upload_as_doc(m.from_user.id)
