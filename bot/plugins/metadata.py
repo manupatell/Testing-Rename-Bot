@@ -24,7 +24,7 @@ from bot.core.file_info import get_file_attr
 from hachoir.metadata import extractMetadata
 from hachoir.parser import createParser
 
-@Client.on_message(filters.command("edit_metadata") & filters.private & ~filters.edited)
+@Client.on_message(filters.command("edit_metadata") & filters.private)
 async def Edit_Metadata(c: Client, m: Message):
     default_f_name = get_media_file_name(m.reply_to_message)
     title = (await db.get_titles(m.from_user.id)) or "StarMovies.hop.sh"
