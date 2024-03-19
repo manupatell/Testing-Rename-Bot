@@ -24,14 +24,11 @@ from bot.core.file_info import get_file_attr
 from hachoir.metadata import extractMetadata
 from hachoir.parser import createParser
 
-@Client.on_message(filters.command("edit_metadata") & filters.private)
+@Client.on_message((filters.private & filters.video | filters.document | filters.audio))
 async def Edit_Metadata(c: Client, m: Message):
-    default_f_name = get_media_file_name(m.reply_to_message)
+    default_f_name = get_media_file_name(m)
     title = (await db.get_titles(m.from_user.id)) or "StarMovies.hop.sh"
     await add_user_to_database(c, m)
-    if not m.reply_to_message:
-        await m.reply_text(f"Reply to video with,\n/{m.command[0]}", True)
-        return
     editable = await m.reply_text("Now send me new file name! Current Title is {title}", quote=True)
     user_input_msg: Message = await c.listen(m.chat.id)
     if user_input_msg.text is None:
@@ -46,10 +43,6 @@ async def Edit_Metadata(c: Client, m: Message):
         new_file_name = user_input_msg.text[:60]
     await editable.edit("Please Wait ...")
     newfile_name = f"{default_f_name.rsplit('.', 1)[0] if default_f_name else 'output'}.mkv"
-    file_type = m.reply_to_message.video or m.reply_to_message.document
-    if not file_type.mime_type.startswith("video/"):
-        await m.reply_text("This is not a Video!", True)
-        return
     await editable.edit("Downloading Video ...")
     dl_loc = Config.DOWNLOAD_DIR + "/" + str(m.from_user.id) + "/" + str(m.message_id) + "/"
     root_dl_loc = dl_loc
