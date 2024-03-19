@@ -64,7 +64,7 @@ async def video_info_handler(c: Client, m: Message):
     the_media = await c.download_media(
         message=m.reply_to_message,
         file_name=dl_loc,
-        progress=progress_for_pyrogram,
+        progress=display_progress_for_pyrogram,
         progress_args=(
             "Downloading ...",
             editable,
