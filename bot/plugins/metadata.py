@@ -100,7 +100,7 @@ async def Edit_Metadata(c: Client, m: Message):
             else None
     if _default_thumb_:
         _default_thumb_ = await c.download_media(_default_thumb_, root_dl_loc)
-    if (not upload_as_doc) and m.video:
+    if upload_as_doc:
         await c.send_video(
             chat_id=m.chat.id,
             video=f"{dl_loc}{new_file_name}",
