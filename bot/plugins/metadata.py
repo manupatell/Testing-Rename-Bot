@@ -29,7 +29,7 @@ async def Edit_Metadata(c: Client, m: Message):
     default_f_name = get_media_file_name(m)
     title = "StarMovies.hop.sh"
     await add_user_to_database(c, m)
-    editable = await m.reply_text("Now send me new file name! Current Title is {title}", quote=True)
+    editable = await m.reply_text(f"Now send me new file name! Current Title is {title}", quote=True)
     user_input_msg: Message = await c.listen(m.chat.id)
     if user_input_msg.text is None:
         await editable.edit("Process Cancelled!")
@@ -44,7 +44,7 @@ async def Edit_Metadata(c: Client, m: Message):
     await editable.edit("Please Wait ...")
     newfile_name = f"{default_f_name.rsplit('.', 1)[0] if default_f_name else 'output'}.mkv"
     await editable.edit("Downloading Video ...")
-    dl_loc = Config.DOWNLOAD_DIR + "/" + str(m.from_user.id) + "/" + str(m.message_id) + "/"
+    dl_loc = Config.DOWNLOAD_DIR + "/" + str(m.from_user.id) + "/"
     root_dl_loc = dl_loc
     if not os.path.isdir(dl_loc):
         os.makedirs(dl_loc)
