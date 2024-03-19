@@ -27,7 +27,7 @@ from hachoir.parser import createParser
 @Client.on_message((filters.private & filters.video | filters.document | filters.audio))
 async def Edit_Metadata(c: Client, m: Message):
     default_f_name = get_media_file_name(m)
-    title = (await db.get_titles(m.from_user.id)) or "StarMovies.hop.sh"
+    title = "StarMovies.hop.sh"
     await add_user_to_database(c, m)
     editable = await m.reply_text("Now send me new file name! Current Title is {title}", quote=True)
     user_input_msg: Message = await c.listen(m.chat.id)
