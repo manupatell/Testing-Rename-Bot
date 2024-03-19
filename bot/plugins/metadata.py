@@ -24,7 +24,7 @@ from bot.core.file_info import get_file_attr
 from hachoir.metadata import extractMetadata
 from hachoir.parser import createParser
 
-@Client.on_message(filters.command("edit_metadata") & filters.private & ~filters.edited)
+@Client.on_message(filters.command("edit_metadata") & filters.private)
 async def video_info_handler(c: Client, m: Message):
     await add_user_to_database(c, m)
     if (not m.reply_to_message) or (len(m.command) == 1):
