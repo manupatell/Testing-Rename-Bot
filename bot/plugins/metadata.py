@@ -117,13 +117,13 @@ async def video_info_handler(c: Client, m: Message):
             chat_id=m.chat.id,
             video=f"{dl_loc}{new_file_name}",
             thumb=_default_thumb_ or None,
-            editable_message=editable,
+#            editable_message=editable,
         )
     else:
         await c.send_document(
             chat_id=m.chat.id,
             document=f"{dl_loc}{new_file_name}",
-            editable_message=editable,
+#            editable_message=editable,
             thumb=_default_thumb_ or None
         )
     await rm_dir(root_dl_loc)
