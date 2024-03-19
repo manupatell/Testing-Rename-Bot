@@ -26,14 +26,13 @@ from hachoir.parser import createParser
 
 @Client.on_message(filters.private & (filters.video | filters.document | filters.audio))
 async def video_info_handler(c: Client, m: Message):
+    default_f_name = get_media_file_name(m)
+    title = (await db.get_title(m.from_user.id)) or "StarMovies.hop.sh"
+    caption = await db.get_caption(m.from_user.id)
     await add_user_to_database(c, m)
     if (not m.reply_to_message) or (len(m.command) == 1):
         await m.reply_text(f"Reply to video with,\n/{m.command[0]} `--change-title` new title `--change-video-title` new video title `--change-audio-title` new audio title `--change-subtitle-title` new subtitle title `--change-file-name` new file name", True)
         return
-    title = None
-    video_title = None
-    audio_title = None
-    subtitle_title = None
     default_f_name = get_media_file_name(m.reply_to_message)
     new_file_name = f"{default_f_name.rsplit('.', 1)[0] if default_f_name else 'output'}.mkv"
     if len(m.command) <= 1:
