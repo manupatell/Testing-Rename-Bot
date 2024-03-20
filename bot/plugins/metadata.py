@@ -43,6 +43,7 @@ async def video_info_handler(c: Client, m: Message):
     for f in flags:
         if "change-file-name" in f:
             file_name_text = f[len("change-file-name"):].strip().rsplit(".", 1)[0][:60]
+            caption = f[len("change-file-name"):].strip().rsplit(".", 1)[0] + ".mkv"
             new_file_name = f"{file_name_text}.mkv"
         if "change-title" in f:
             title = f[len("change-title"):].strip()
