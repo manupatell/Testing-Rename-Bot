@@ -33,8 +33,12 @@ async def video_info_handler(c: Client, m: Message):
     file_name = " ".join(m.command[1:])
     title = (await db.get_title(m.from_user.id)) or "StarMovies.hop.sh"
     default_f_name = get_media_file_name(m.reply_to_message)
-    new_file_name = default_f_name[:60] + default_f_name[-4:]
-    newfile_name = default_f_name[:60] + default_f_name[-4:]
+    newfile_name = default_f_name[:60] + default_f_name[-4:]    
+    if file_name:  # If a new file name is provided in the command
+        new_file_name = file_name[:60] + default_f_name[-4:]  # Get first 60 characters and append the original file extension
+    else:
+        new_file_name = default_f_name # Keep the original file name
+    
     if not m.reply_to_message.video:
         await m.reply_text("This is not a Video!", True)
         return
@@ -100,12 +104,14 @@ async def video_info_handler(c: Client, m: Message):
             chat_id=m.chat.id,
             video=f"{dl_loc}{new_file_name}",
             thumb=_default_thumb_ or None,
+            caption=new_file_name
         )
     else:
         await c.send_document(
             chat_id=m.chat.id,
             document=f"{dl_loc}{new_file_name}",
-            thumb=_default_thumb_ or None
+            thumb=_default_thumb_ or None,
+            caption=new_file_name
         )
     await rm_dir(root_dl_loc)
     await editable.edit("Upload Successfully..!")
