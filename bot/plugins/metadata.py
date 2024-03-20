@@ -28,7 +28,7 @@ from hachoir.parser import createParser
 async def video_info_handler(c: Client, m: Message):
     await add_user_to_database(c, m)
     if not m.reply_to_message:
-        await m.reply_text(f"Reply to video with,\n/{m.commdand", True)
+        await m.reply_text(f"Reply to video with,\n/{m.command[0]}", True)
         return
     title = (await db.get_title(m.from_user.id)) or "StarMovies.hop.sh"
     default_f_name = get_media_file_name(m.reply_to_message)
