@@ -30,14 +30,11 @@ async def video_info_handler(c: Client, m: Message):
     if (not m.reply_to_message) or (len(m.command) == 1):
         await m.reply_text(f"Reply to video with,\n/{m.command[0]} file_name", True)
         return
-    
-    # Extract file name from command
     file_name = " ".join(m.command[1:])
-    
     title = (await db.get_title(m.from_user.id)) or "StarMovies.hop.sh"
     default_f_name = get_media_file_name(m.reply_to_message)
-    new_file_name = f"{file_name if file_name else default_f_name}"
-    newfile_name = f"{file_name if file_name else default_f_name}"
+    new_file_name = default_f_name[:60] + default_f_name[-4:]
+    newfile_name = default_f_name[:60] + default_f_name[-4:]
     if not m.reply_to_message.video:
         await m.reply_text("This is not a Video!", True)
         return
