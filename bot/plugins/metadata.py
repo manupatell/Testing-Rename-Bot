@@ -115,7 +115,7 @@ async def video_info_handler(c: Client, m: Message):
             else None
     if _default_thumb_:
         _default_thumb_ = await c.download_media(_default_thumb_, root_dl_loc)
-    if (not upload_as_doc) and m.reply_to_message.video:
+    if not upload_as_doc:
         await c.send_video(
             chat_id=m.chat.id,
             video=f"{dl_loc}{new_file_name}",
@@ -133,4 +133,3 @@ async def video_info_handler(c: Client, m: Message):
         )
     await rm_dir(root_dl_loc)
     await editable.edit("Upload Successfully..!")
-    
