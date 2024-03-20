@@ -50,7 +50,7 @@ async def video_info_handler(c: Client, m: Message):
         os.makedirs(dl_loc)
     c_time = time.time()
     the_media = await c.download_media(
-        message=m.reply_to_message,
+        message=m,
         file_name=dl_loc,
         progress=display_progress_for_pyrogram,
         progress_args=(
@@ -94,13 +94,13 @@ async def video_info_handler(c: Client, m: Message):
     upload_as_doc = await db.get_upload_as_doc(m.from_user.id)
     _default_thumb_ = await db.get_thumbnail(m.from_user.id)
     if not _default_thumb_:
-        _m_attr = get_file_attr(m.reply_to_message)
+        _m_attr = get_file_attr(m)
         _default_thumb_ = _m_attr.thumbs[0].file_id \
             if (_m_attr and _m_attr.thumbs) \
             else None
     if _default_thumb_:
         _default_thumb_ = await c.download_media(_default_thumb_, root_dl_loc)
-    if (not upload_as_doc) and m.reply_to_message.video:
+    if (not upload_as_doc) and m.video:
         await c.send_video(
             chat_id=m.chat.id,
             video=f"{dl_loc}{new_file_name}",
