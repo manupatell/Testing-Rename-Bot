@@ -28,18 +28,30 @@ from hachoir.parser import createParser
 async def video_info_handler(c: Client, m: Message):
     await add_user_to_database(c, m)
     if (not m.reply_to_message) or (len(m.command) == 1):
-        await m.reply_text(f"Reply to video with,\n/{m.command[0]} file_name", True)
+        await m.reply_text(f"Reply to video with,\n/{m.command[0]} `--change-title` new title `--change-video-title` new video title `--change-audio-title` new audio title `--change-subtitle-title` new subtitle title `--change-file-name` new file name", True)
         return
-    file_name = " ".join(m.command[1:])
-    title = (await db.get_title(m.from_user.id)) or "StarMovies.hop.sh"
+    title = None
+    video_title = None
+    audio_title = None
+    subtitle_title = None
     default_f_name = get_media_file_name(m.reply_to_message)
-    newfile_name = default_f_name[:60] + default_f_name[-4:]    
-    if file_name:  # If a new file name is provided in the command
-        new_file_name = file_name[:60] + default_f_name[-4:]  # Get first 60 characters and append the original file extension
-    else:
-        new_file_name = default_f_name # Keep the original file name
-    
-    #if not m.reply_to_message.video:
+    new_file_name = f"{default_f_name.rsplit('.', 1)[0] if default_f_name else 'output'}.mkv"
+    if len(m.command) <= 1:
+        return
+
+    flags = [i.strip() for i in m.text.split('--')]
+    for f in flags:
+        if "change-file-name" in f:
+            new_file_name = f[len("change-file-name"):].strip().rsplit(".", 1)[0] + ".mkv"
+        if "change-title" in f:
+            title = f[len("change-title"):].strip()
+        if "change-video-title" in f:
+            video_title = f[len("change-video-title"):].strip()
+        if "change-audio-title" in f:
+            audio_title = f[len("change-audio-title"):].strip()
+        if "change-subtitle-title" in f:
+            subtitle_title = f[len("change-subtitle-title"):].strip()
+    file_type = m.reply_to_message.video or m.reply_to_message.document
     if not file_type.mime_type.startswith("video/"):
         await m.reply_text("This is not a Video!", True)
         return
