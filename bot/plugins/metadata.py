@@ -107,7 +107,7 @@ async def video_info_handler(c: Client, m: Message):
     except: pass
     upload_as_doc = await db.get_upload_as_doc(m.from_user.id)
     _default_thumb_ = await db.get_thumbnail(m.from_user.id)
-    file_caption = f"<b>{caption}</b>"
+    file_caption = f"**{caption}**"
     if not _default_thumb_:
         _m_attr = get_file_attr(m.reply_to_message)
         _default_thumb_ = _m_attr.thumbs[0].file_id \
@@ -120,7 +120,7 @@ async def video_info_handler(c: Client, m: Message):
             chat_id=m.chat.id,
             video=f"{dl_loc}{new_file_name}",
             thumb=_default_thumb_ or None,
-            parse_mode="html",
+            parse_mode="markdown",
             caption=file_caption,
         )
     else:
@@ -128,7 +128,7 @@ async def video_info_handler(c: Client, m: Message):
             chat_id=m.chat.id,
             document=f"{dl_loc}{new_file_name}",
             caption=file_caption,
-            parse_mode="html",
+            parse_mode="markdown",
             thumb=_default_thumb_ or None
         )
     await rm_dir(root_dl_loc)
