@@ -30,14 +30,15 @@ async def video_info_handler(c: Client, m: Message):
     if (not m.reply_to_message) or (len(m.command) == 1):
         await m.reply_text(f"Reply to video with,\n/{m.command[0]} file_name", True)
         return
+    
+    # Extract file name from command
+    file_name = " ".join(m.command[1:])
+    
     title = (await db.get_title(m.from_user.id)) or "StarMovies.hop.sh"
     default_f_name = get_media_file_name(m.reply_to_message)
-    new_file_name = f"{default_f_name.rsplit('.', 1)[0] if default_f_name else 'output'}.mkv"
-    newfile_name = f"{default_f_name.rsplit('.', 1)[0] if default_f_name else 'output'}.mkv"
-    if len(m.command) <= 1:
-        return
-    file_type = m.reply_to_message.video or m.reply_to_message.document
-    if not file_type.mime_type.startswith("video/"):
+    new_file_name = f"{file_name if file_name else default_f_name}"
+    newfile_name = f"{file_name if file_name else default_f_name}"
+    if not m.reply_to_message.video:
         await m.reply_text("This is not a Video!", True)
         return
     editable = await m.reply_text("Downloading Video ...", quote=True)
@@ -81,7 +82,7 @@ async def video_info_handler(c: Client, m: Message):
         await editable.edit("Please Wait ...\n\nProcessing Video ...")
         await execute(middle_cmd)
         await editable.edit("Renamed Successfully!")
-    except:
+    except Exception as e:
         # Clean Up
         await editable.edit("Failed to process video!")
         await rm_dir(root_dl_loc)
@@ -102,13 +103,12 @@ async def video_info_handler(c: Client, m: Message):
             chat_id=m.chat.id,
             video=f"{dl_loc}{new_file_name}",
             thumb=_default_thumb_ or None,
-#            editable_message=editable,
         )
     else:
         await c.send_document(
             chat_id=m.chat.id,
             document=f"{dl_loc}{new_file_name}",
-#            editable_message=editable,
             thumb=_default_thumb_ or None
         )
     await rm_dir(root_dl_loc)
+    
