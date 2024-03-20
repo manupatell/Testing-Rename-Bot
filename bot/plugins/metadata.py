@@ -27,30 +27,26 @@ from hachoir.parser import createParser
 @Client.on_message(filters.command("edit_metadata") & filters.private)
 async def video_info_handler(c: Client, m: Message):
     await add_user_to_database(c, m)
-    if (not m.reply_to_message) or (len(m.command) == 1):
-        await m.reply_text(f"Reply to video with,\n/{m.command[0]} `--change-title` new title `--change-video-title` new video title `--change-audio-title` new audio title `--change-subtitle-title` new subtitle title `--change-file-name` new file name", True)
+    if not m.reply_to_message:
+        await m.reply_text(f"Reply to video with,\n/{m.commdand", True)
         return
-    title = None
-    video_title = None
-    audio_title = None
-    subtitle_title = None
+    title = (await db.get_title(m.from_user.id)) or "StarMovies.hop.sh"
     default_f_name = get_media_file_name(m.reply_to_message)
     new_file_name = f"{default_f_name.rsplit('.', 1)[0] if default_f_name else 'output'}.mkv"
-    if len(m.command) <= 1:
-        return
-
-    flags = [i.strip() for i in m.text.split('--')]
-    for f in flags:
-        if "change-file-name" in f:
-            new_file_name = f[len("change-file-name"):].strip().rsplit(".", 1)[0] + ".mkv"
-        if "change-title" in f:
-            title = f[len("change-title"):].strip()
-        if "change-video-title" in f:
-            video_title = f[len("change-video-title"):].strip()
-        if "change-audio-title" in f:
-            audio_title = f[len("change-audio-title"):].strip()
-        if "change-subtitle-title" in f:
-            subtitle_title = f[len("change-subtitle-title"):].strip()
+    editable = await m.reply_text("Now send me new file name! Current Title is {title}", quote=True)
+    user_input_msg: Message = await c.listen(m.chat.id)
+    if user_input_msg.text is None:
+        await editable.edit("Process Cancelled!")
+        return await user_input_msg.continue_propagation()
+    if user_input_msg.text and user_input_msg.text.startswith("/"):
+        await editable.edit("Process Cancelled!")
+        return await user_input_msg.continue_propagation()
+    if user_input_msg.text.rsplit(".", 1)[-1].lower() != default_f_name.rsplit(".", 1)[-1].lower():
+        file_name = user_input_msg.text.rsplit(".", 1)[0][:255] + "." + default_f_name.rsplit(".", 1)[-1].lower()
+    else:
+        new_file_name = user_input_msg.text[:60]
+    await editable.edit("Please Wait ...")
+    newfile_name = f"{default_f_name.rsplit('.', 1)[0] if default_f_name else 'output'}.mkv"
     file_type = m.reply_to_message.video or m.reply_to_message.document
     if not file_type.mime_type.startswith("video/"):
         await m.reply_text("This is not a Video!", True)
