@@ -120,7 +120,7 @@ async def video_info_handler(c: Client, m: Message):
             chat_id=m.chat.id,
             video=f"{dl_loc}{new_file_name}",
             thumb=_default_thumb_ or None,
-            parse_mode="markdown",
+            parse_mode=enums.ParseMode.MARKDOWN,
             caption=file_caption,
         )
     else:
@@ -128,7 +128,7 @@ async def video_info_handler(c: Client, m: Message):
             chat_id=m.chat.id,
             document=f"{dl_loc}{new_file_name}",
             caption=file_caption,
-            parse_mode="markdown",
+            parse_mode=enums.ParseMode.MARKDOWN,
             thumb=_default_thumb_ or None
         )
     await rm_dir(root_dl_loc)
