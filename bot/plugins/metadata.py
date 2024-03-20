@@ -41,7 +41,7 @@ async def video_info_handler(c: Client, m: Message):
 
     flags = [i.strip() for i in m.text.split('--')]
     for f in flags:
-        if "change-file-name" in f:
+        if "file-name" in f:
             file_name_text = f[len("change-file-name"):].strip().rsplit(".", 1)[0][:60]
             caption = f[len("change-file-name"):].strip().rsplit(".", 1)[0] + ".mkv"
             new_file_name = f"{file_name_text}.mkv"
@@ -107,6 +107,7 @@ async def video_info_handler(c: Client, m: Message):
     except: pass
     upload_as_doc = await db.get_upload_as_doc(m.from_user.id)
     _default_thumb_ = await db.get_thumbnail(m.from_user.id)
+    file_caption = f"<b>{caption}</b>"
     if not _default_thumb_:
         _m_attr = get_file_attr(m.reply_to_message)
         _default_thumb_ = _m_attr.thumbs[0].file_id \
@@ -119,13 +120,15 @@ async def video_info_handler(c: Client, m: Message):
             chat_id=m.chat.id,
             video=f"{dl_loc}{new_file_name}",
             thumb=_default_thumb_ or None,
-            caption=caption,
+            parse_mode="html",
+            caption=file_caption,
         )
     else:
         await c.send_document(
             chat_id=m.chat.id,
             document=f"{dl_loc}{new_file_name}",
-            caption=caption,
+            caption=file_caption,
+            parse_mode="html",
             thumb=_default_thumb_ or None
         )
     await rm_dir(root_dl_loc)
