@@ -35,14 +35,15 @@ async def video_info_handler(c: Client, m: Message):
     audio_title = "StarMovies.hop.sh"
     subtitle_title = "StarMovies.hop.sh"
     default_f_name = get_media_file_name(m.reply_to_message)
-    new_file_name = f"{default_f_name.rsplit('.', 1)[0] if default_f_name else 'output'}.mkv"
+    new_file_name = f"{default_f_name.rsplit('.', 1)[0][:60] if default_f_name else 'output'}.mkv"
     if len(m.command) <= 1:
         return
 
     flags = [i.strip() for i in m.text.split('--')]
     for f in flags:
         if "change-file-name" in f:
-            new_file_name = f[len("change-file-name"):].strip().rsplit(".", 1)[0] + ".mkv"
+            file_name_text = f[len("change-file-name"):].strip().rsplit(".", 1)[0][:60]
+            new_file_name = f"{file_name_text}.mkv"
         if "change-title" in f:
             title = f[len("change-title"):].strip()
         if "change-video-title" in f:
@@ -117,13 +118,13 @@ async def video_info_handler(c: Client, m: Message):
             chat_id=m.chat.id,
             video=f"{dl_loc}{new_file_name}",
             thumb=_default_thumb_ or None,
-            caption=new_file_name,
+            caption=caption,
         )
     else:
         await c.upload_document(
             chat_id=m.chat.id,
             document=f"{dl_loc}{new_file_name}",
-            caption=new_file_name,
+            caption=caption,
             thumb=_default_thumb_ or None
         )
     await rm_dir(root_dl_loc)
