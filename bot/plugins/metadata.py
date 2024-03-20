@@ -28,7 +28,7 @@ from hachoir.parser import createParser
 async def video_info_handler(c: Client, m: Message):
     await add_user_to_database(c, m)
     if (not m.reply_to_message) or (len(m.command) == 1):
-        await m.reply_text(f"Reply to video with,\n/{m.command[0]} `--change-title` new title `--change-video-title` new video title `--change-audio-title` new audio title `--change-subtitle-title` new subtitle title `--change-file-name` new file name", True)
+        await m.reply_text(f"Reply to video with,\n/{m.command[0]} `--change-title` new title `--change-video-title` new video title `--change-audio-title` new audio title `--change-subtitle-title` new subtitle title `--file-name` new file name", True)
         return
     title = "StarMovies.hop.sh"
     video_title = "StarMovies.hop.sh"
