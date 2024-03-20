@@ -108,4 +108,5 @@ async def video_info_handler(c: Client, m: Message):
             thumb=_default_thumb_ or None
         )
     await rm_dir(root_dl_loc)
+    await editable.edit("Upload Successfully..!")
     
