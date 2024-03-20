@@ -39,7 +39,8 @@ async def video_info_handler(c: Client, m: Message):
     else:
         new_file_name = default_f_name # Keep the original file name
     
-    if not m.reply_to_message.video:
+    #if not m.reply_to_message.video:
+    if not file_type.mime_type.startswith("video/"):
         await m.reply_text("This is not a Video!", True)
         return
     editable = await m.reply_text("Downloading Video ...", quote=True)
@@ -83,7 +84,7 @@ async def video_info_handler(c: Client, m: Message):
         await editable.edit("Please Wait ...\n\nProcessing Video ...")
         await execute(middle_cmd)
         await editable.edit("Renamed Successfully!")
-    except Exception as e:
+    except:
         # Clean Up
         await editable.edit("Failed to process video!")
         await rm_dir(root_dl_loc)
@@ -100,18 +101,18 @@ async def video_info_handler(c: Client, m: Message):
     if _default_thumb_:
         _default_thumb_ = await c.download_media(_default_thumb_, root_dl_loc)
     if (not upload_as_doc) and m.reply_to_message.video:
-        await c.send_video(
+        await c.upload_video(
             chat_id=m.chat.id,
             video=f"{dl_loc}{new_file_name}",
             thumb=_default_thumb_ or None,
-            caption=new_file_name
+            caption=new_file_name,
         )
     else:
-        await c.send_document(
+        await c.upload_document(
             chat_id=m.chat.id,
             document=f"{dl_loc}{new_file_name}",
-            thumb=_default_thumb_ or None,
-            caption=new_file_name
+            caption=new_file_name,
+            thumb=_default_thumb_ or None
         )
     await rm_dir(root_dl_loc)
     await editable.edit("Upload Successfully..!")
