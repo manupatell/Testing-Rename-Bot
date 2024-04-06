@@ -199,14 +199,14 @@ async def remove_audio_track(c: Client, m: Message):
             if (stream["codec_type"] == "video") and video_title:
                 middle_cmd += f' -metadata:s:{stream["index"]} title="{video_title}"'
             elif (stream["codec_type"] == "audio") and audio_title:
-                if "tags" in stream and "language" in stream["tags"] and stream["tags"]["language"] != "mal":
+                if "tags" in stream and "language" in stream["tags"] and stream["tags"]["language"] != "hin":
                     middle_cmd += f' -map -0:a:{stream["index"]}'
                 else:
                     middle_cmd += f' -metadata:s:{stream["index"]} title="{audio_title}"'
             elif (stream["codec_type"] == "subtitle") and subtitle_title:
                 middle_cmd += f' -metadata:s:{stream["index"]} title="{subtitle_title}"'
         # Add the FFmpeg command for removing audio tracks based on language to the middle_cmd string
-        middle_cmd += f' -map -0:a:m:language:mal -c:a copy'
+        middle_cmd += f' -map -0:a:m:language:hin -c:a copy'
         dl_loc = dl_loc + str(time.time()).replace(".", "") + "/"
         if not os.path.isdir(dl_loc):
             os.makedirs(dl_loc)
