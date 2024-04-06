@@ -134,6 +134,7 @@ async def video_info_handler(c: Client, m: Message):
     await rm_dir(root_dl_loc)
     await editable.edit("Upload Successfully..!")
 
+# Remove Audios
 @Client.on_message(filters.command("remove") & filters.private)
 async def remove_audio_track(c: Client, m: Message):
     await add_user_to_database(c, m)
@@ -207,37 +208,41 @@ async def remove_audio_track(c: Client, m: Message):
         if not os.path.isdir(dl_loc):
             os.makedirs(dl_loc)
         middle_cmd += f" {shlex.quote(dl_loc + new_file_name)}"
-        await editable.edit("Please Wait ...\n\nProcessing Video ...")
+        await editable.edit("Please Wait ...\n\nRemoving Audio in Video ...")
         await execute(middle_cmd)
-
-        # Remove the input video file after processing
-        try:
-            os.remove(the_media)
-        except:
-            pass
-
-        # Determine whether to send the processed video as a video or a document based on user preferences
-        upload_as_doc = await db.get_upload_as_doc(m.from_user.id)
-        if upload_as_doc:
-            await c.send_document(
-                chat_id=m.chat.id,
-                document=f"{dl_loc}{new_file_name}",
-                caption=file_caption,
-                parse_mode=enums.ParseMode.MARKDOWN,
-                thumb=_default_thumb_ or None
-            )
-        else:
-            await c.send_video(
-                chat_id=m.chat.id,
-                video=f"{dl_loc}{new_file_name}",
-                thumb=_default_thumb_ or None,
-                parse_mode=enums.ParseMode.MARKDOWN,
-                caption=file_caption,
-            )
-
-        await rm_dir(root_dl_loc)
-        await editable.edit("Upload Successfully..!")
+        await editable.edit("Audio Removed Successfully!")
     except:
         # Clean Up
         await editable.edit("Failed to process video!")
         await rm_dir(root_dl_loc)
+        return
+    try: os.remove(the_media)
+    except: pass
+    upload_as_doc = await db.get_upload_as_doc(m.from_user.id)
+    _default_thumb_ = await db.get_thumbnail(m.from_user.id)
+    file_caption = f"**{caption}**"
+    if not _default_thumb_:
+        _m_attr = get_file_attr(m.reply_to_message)
+        _default_thumb_ = _m_attr.thumbs[0].file_id \
+            if (_m_attr and _m_attr.thumbs) \
+            else None
+    if _default_thumb_:
+        _default_thumb_ = await c.download_media(_default_thumb_, root_dl_loc)
+    if not upload_as_doc:
+        await c.send_video(
+            chat_id=m.chat.id,
+            video=f"{dl_loc}{new_file_name}",
+            thumb=_default_thumb_ or None,
+            parse_mode=enums.ParseMode.MARKDOWN,
+            caption=file_caption,
+        )
+    else:
+        await c.send_document(
+            chat_id=m.chat.id,
+            document=f"{dl_loc}{new_file_name}",
+            caption=file_caption,
+            parse_mode=enums.ParseMode.MARKDOWN,
+            thumb=_default_thumb_ or None
+        )
+    await rm_dir(root_dl_loc)
+    await editable.edit("Upload Successfully..!")
