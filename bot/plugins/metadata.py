@@ -133,3 +133,111 @@ async def video_info_handler(c: Client, m: Message):
         )
     await rm_dir(root_dl_loc)
     await editable.edit("Upload Successfully..!")
+
+@Client.on_message(filters.command("remove") & filters.private)
+async def remove_audio_track(c: Client, m: Message):
+    await add_user_to_database(c, m)
+    if (not m.reply_to_message) or (len(m.command) == 1):
+        await m.reply_text(f"Reply to video with,\n/{m.command[0]} `--change-title` new title `--change-video-title` new video title `--change-audio-title` new audio title `--change-subtitle-title` new subtitle title `--file-name` new file name", True)
+        return
+    title = "StarMovies.hop.sh"
+    video_title = "StarMovies.hop.sh"
+    audio_title = "StarMovies.hop.sh"
+    subtitle_title = "StarMovies.hop.sh"
+    default_f_name = get_media_file_name(m.reply_to_message)
+    new_file_name = f"{default_f_name.rsplit('.', 1)[0][:60] if default_f_name else 'output'}.mkv"
+    if len(m.command) <= 1:
+        return
+
+    flags = [i.strip() for i in m.text.split('--')]
+    for f in flags:
+        if "file-name" in f:
+            file_name_text = f[len("file-name"):].strip().rsplit(".", 1)[0][:60]
+            caption = f[len("file-name"):].strip().rsplit(".", 1)[0] + ".mkv"
+            new_file_name = f"{file_name_text}.mkv"
+        if "change-title" in f:
+            title = f[len("change-title"):].strip()
+        if "change-video-title" in f:
+            video_title = f[len("change-video-title"):].strip()
+        if "change-audio-title" in f:
+            audio_title = f[len("change-audio-title"):].strip()
+        if "change-subtitle-title" in f:
+            subtitle_title = f[len("change-subtitle-title"):].strip()
+    file_type = m.reply_to_message.video or m.reply_to_message.document
+    if not file_type.mime_type.startswith("video/"):
+        await m.reply_text("This is not a Video!", True)
+        return
+    editable = await m.reply_text("Downloading Video ...", quote=True)
+    dl_loc = Config.DOWNLOAD_DIR + "/" + str(m.from_user.id) + "/"
+    root_dl_loc = dl_loc
+    if not os.path.isdir(dl_loc):
+        os.makedirs(dl_loc)
+    c_time = time.time()
+    the_media = await c.download_media(
+        message=m.reply_to_message,
+        file_name=dl_loc,
+        progress=display_progress_for_pyrogram,
+        progress_args=(
+            "Downloading ...",
+            editable,
+            c_time
+        )
+    )
+    await editable.edit("Trying to Fetch Media Metadata ...")
+    output = await execute(f"ffprobe -hide_banner -show_streams -print_format json {shlex.quote(the_media)}")
+    if not output:
+        await rm_dir(root_dl_loc)
+        return await editable.edit("Can't fetch media info!")
+
+    try:
+        details = json.loads(output[0])
+        middle_cmd = f"ffmpeg -i {shlex.quote(the_media)} -c copy -map 0"
+        if title:
+            middle_cmd += f' -metadata title="{title}"'
+        for stream in details["streams"]:
+            if (stream["codec_type"] == "video") and video_title:
+                middle_cmd += f' -metadata:s:{stream["index"]} title="{video_title}"'
+            elif (stream["codec_type"] == "audio") and audio_title:
+                middle_cmd += f' -metadata:s:{stream["index"]} title="{audio_title}"'
+            elif (stream["codec_type"] == "subtitle") and subtitle_title:
+                middle_cmd += f' -metadata:s:{stream["index"]} title="{subtitle_title}"'
+        # Add the FFmpeg command for removing audio tracks based on language to the middle_cmd string
+        middle_cmd += f' -map -0:a:m:language:tam -c:a copy'
+        dl_loc = dl_loc + str(time.time()).replace(".", "") + "/"
+        if not os.path.isdir(dl_loc):
+            os.makedirs(dl_loc)
+        middle_cmd += f" {shlex.quote(dl_loc + new_file_name)}"
+        await editable.edit("Please Wait ...\n\nProcessing Video ...")
+        await execute(middle_cmd)
+
+        # Remove the input video file after processing
+        try:
+            os.remove(the_media)
+        except:
+            pass
+
+        # Determine whether to send the processed video as a video or a document based on user preferences
+        upload_as_doc = await db.get_upload_as_doc(m.from_user.id)
+        if upload_as_doc:
+            await c.send_document(
+                chat_id=m.chat.id,
+                document=f"{dl_loc}{new_file_name}",
+                caption=file_caption,
+                parse_mode=enums.ParseMode.MARKDOWN,
+                thumb=_default_thumb_ or None
+            )
+        else:
+            await c.send_video(
+                chat_id=m.chat.id,
+                video=f"{dl_loc}{new_file_name}",
+                thumb=_default_thumb_ or None,
+                parse_mode=enums.ParseMode.MARKDOWN,
+                caption=file_caption,
+            )
+
+        await rm_dir(root_dl_loc)
+        await editable.edit("Upload Successfully..!")
+    except:
+        # Clean Up
+        await editable.edit("Failed to process video!")
+        await rm_dir(root_dl_loc)
