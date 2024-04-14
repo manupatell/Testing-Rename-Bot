@@ -30,7 +30,7 @@ async def video_info_handler(c: Client, m: Message):
     if (not m.reply_to_message) or (len(m.command) == 1):
         await m.reply_text(f"Reply to video with,\n/{m.command[0]} `--change-title` new title `--change-video-title` new video title `--change-audio-title` new audio title `--change-subtitle-title` new subtitle title `--file-name` new file name", True)
         return
-    title = "StarMovies.hop.sh"
+    title = await db.set_title()
     video_title = "StarMovies.hop.sh"
     audio_title = "StarMovies.hop.sh"
     subtitle_title = "StarMovies.hop.sh"
