@@ -199,10 +199,15 @@ async def remove_audio_track(c: Client, m: Message):
             if (stream["codec_type"] == "video") and video_title:
                 middle_cmd += f' -metadata:s:{stream["index"]} title="{video_title}"'
             elif (stream["codec_type"] == "audio") and audio_title:
-                if "tags" in stream and "language" in stream["tags"] and stream["tags"]["language"] != "tam":
-                    middle_cmd += f' -map -0:a:{stream["index"]}'
+                if "tags" in stream and "language" in stream["tags"]:
+                    language = stream["tags"]["language"]
+                    if language and language.lower() == "tam":
+                        middle_cmd += f' -metadata:s:{stream["index"]} title="{audio_title}"'
+                    else:
+                        middle_cmd += f' -map -0:a:{stream["index"]}'
                 else:
-                    middle_cmd += f' -metadata:s:{stream["index"]} title="{audio_title}"'
+                    # If language tag is not present, assume it's not in Tamil and remove it
+                    middle_cmd += f' -map -0:a:{stream["index"]}'
             elif (stream["codec_type"] == "subtitle") and subtitle_title:
                 middle_cmd += f' -metadata:s:{stream["index"]} title="{subtitle_title}"'
         # Add the FFmpeg command for removing audio tracks based on language to the middle_cmd string
