@@ -202,9 +202,9 @@ async def remove_audio_track(c: Client, m: Message):
                 if "tags" in stream and "language" in stream["tags"]:
                     language = stream["tags"]["language"]
                     if language and language.lower() == "tam":
-                        middle_cmd += f' -metadata:s:{stream["index"]} title="{audio_title}"'
-                    else:
                         middle_cmd += f' -map -0:a:{stream["index"]}'
+                    else:
+                        middle_cmd += f' -metadata:s:{stream["index"]} title="{audio_title}"'
                 else:
                     # If language tag is not present, assume it's not in Tamil and remove it
                     middle_cmd += f' -map -0:a:{stream["index"]}'
