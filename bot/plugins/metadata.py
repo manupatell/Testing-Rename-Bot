@@ -199,7 +199,7 @@ async def remove_audio_track(c: Client, m: Message):
             if (stream["codec_type"] == "video") and video_title:
                 middle_cmd += f' -metadata:s:{stream["index"]} title="{video_title}"'
             elif (stream["codec_type"] == "audio") and audio_title:
-                if "tags" in stream and "language" in stream["tags"] and stream["tags"]["language"] != "hin":
+                if "tags" in stream and "language" in stream["tags"] and stream["tags"]["language"] != "tam":
                     middle_cmd += f' -map -0:a:{stream["index"]}'
                 else:
                     middle_cmd += f' -metadata:s:{stream["index"]} title="{audio_title}"'
