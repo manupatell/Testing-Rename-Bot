@@ -13,7 +13,7 @@ async def show_settings(m: "types.Message"):
     caption = user_data.get("caption", None)
     apply_caption = user_data.get("apply_caption", True)
     thumbnail = user_data.get("thumbnail", None)
-    titles = user_data.get("title", None)
+    title = user_data.get("title", None)
     buttons_markup = [
         [types.InlineKeyboardButton(f"Upload as Doc {'✅' if upload_as_doc else '❌'}",
                                     callback_data="triggerUploadMode")],
@@ -23,17 +23,17 @@ async def show_settings(m: "types.Message"):
                                     callback_data="triggerApplyDefaultCaption")],
         [types.InlineKeyboardButton(f"{'Change' if caption else 'Set'} Custom Caption",
                                     callback_data="setCustomCaption")],
-        [types.InlineKeyboardButton(f"{'Change' if titles else 'Set'} Titles",
-                                    callback_data="setTitles")],
+        [types.InlineKeyboardButton(f"{'Change' if title else 'Set'} Title",
+                                    callback_data="setTitle")],
         [types.InlineKeyboardButton(f"{'Change' if thumbnail else 'Set'} Thumbnail",
                                     callback_data="setThumbnail")]
     ]
     if thumbnail:
         buttons_markup.append([types.InlineKeyboardButton("Show Thumbnail",
                                                           callback_data="showThumbnail")])
-    if titles:
-        buttons_markup.append([types.InlineKeyboardButton("Show Titles",
-                                                          callback_data="showTitles")])
+    if title:
+        buttons_markup.append([types.InlineKeyboardButton("Show Title",
+                                                          callback_data="showTitle")])
     if caption:
         buttons_markup.append([types.InlineKeyboardButton("Show Caption",
                                                           callback_data="showCaption")])
