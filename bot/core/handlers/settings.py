@@ -13,7 +13,7 @@ async def show_settings(m: "types.Message"):
     caption = user_data.get("caption", None)
     apply_caption = user_data.get("apply_caption", True)
     thumbnail = user_data.get("thumbnail", None)
-    titles = user_data.get("titles", None)
+    titles = user_data.get("title", None)
     buttons_markup = [
         [types.InlineKeyboardButton(f"Upload as Doc {'✅' if upload_as_doc else '❌'}",
                                     callback_data="triggerUploadMode")],
