@@ -24,12 +24,9 @@ from bot.core.file_info import get_file_attr
 from hachoir.metadata import extractMetadata
 from hachoir.parser import createParser
 
-@Client.on_message(filters.command("edit_metadata") & filters.private)
+@Client.on_message(filters.private & (filters.document | filters.video))
 async def video_info_handler(c: Client, m: Message):
     await add_user_to_database(c, m)
-    if (not m.reply_to_message) or (len(m.command) == 1):
-        await m.reply_text(f"Reply to video with,\n/{m.command[0]} `--file-name` new file name", True)
-        return
     title = (await db.get_title(m.from_user.id)) or "Telegram ~ @Star_Moviess_Tamil"
     video_title = (await db.get_title(m.from_user.id)) or "Telegram ~ @Star_Moviess_Tamil"
     audio_title = (await db.get_title(m.from_user.id)) or "Telegram ~ @Star_Moviess_Tamil"
