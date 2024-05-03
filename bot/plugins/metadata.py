@@ -39,20 +39,12 @@ async def video_info_handler(c: Client, m: Message):
     if len(m.command) <= 1:
         return
 
-    flags = [i.strip() for i in m.text.split('--')]
+    flags = [i.strip() for i in m.text.split(' ')]
     for f in flags:
-        if "file-name" in f:
-            file_name_text = f[len("file-name"):].strip().rsplit(".", 1)[0][:60]
-            caption = f[len("file-name"):].strip().rsplit(".", 1)[0] + ".mkv"
+        if "" in f:
+            file_name_text = f[len(""):].strip().rsplit(".", 1)[0][:60]
+            caption = f[len(""):].strip().rsplit(".", 1)[0] + ".mkv"
             new_file_name = f"{file_name_text}.mkv"
-        if "change-title" in f:
-            title = f[len("change-title"):].strip()
-        if "change-video-title" in f:
-            video_title = f[len("change-video-title"):].strip()
-        if "change-audio-title" in f:
-            audio_title = f[len("change-audio-title"):].strip()
-        if "change-subtitle-title" in f:
-            subtitle_title = f[len("change-subtitle-title"):].strip()
     file_type = m.reply_to_message.video or m.reply_to_message.document
     if not file_type.mime_type.startswith("video/"):
         await m.reply_text("This is not a Video!", True)
