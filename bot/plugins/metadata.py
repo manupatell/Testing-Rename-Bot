@@ -24,25 +24,35 @@ from bot.core.file_info import get_file_attr
 from hachoir.metadata import extractMetadata
 from hachoir.parser import createParser
 
-@Client.on_message(filters.private & (filters.document | filters.video))
+@Client.on_message(filters.command("edit_metadata") & filters.private)
 async def video_info_handler(c: Client, m: Message):
     await add_user_to_database(c, m)
+    if (not m.reply_to_message) or (len(m.command) == 1):
+        await m.reply_text(f"Reply to video with,\n/{m.command[0]} `--file-name` new file name", True)
+        return
     title = (await db.get_title(m.from_user.id)) or "Telegram ~ @Star_Moviess_Tamil"
     video_title = (await db.get_title(m.from_user.id)) or "Telegram ~ @Star_Moviess_Tamil"
     audio_title = (await db.get_title(m.from_user.id)) or "Telegram ~ @Star_Moviess_Tamil"
     subtitle_title = (await db.get_title(m.from_user.id)) or "Telegram ~ @Star_Moviess_Tamil"
     default_f_name = get_media_file_name(m.reply_to_message)
-    file_extension = os.path.splitext(default_f_name)[1]
-    new_file_name = f"{default_f_name.rsplit('.', 1)[0][:60] if default_f_name else 'output'}{file_extension}"
+    new_file_name = f"{default_f_name.rsplit('.', 1)[0][:60] if default_f_name else 'output'}.mkv"
     if len(m.command) <= 1:
         return
 
-    flags = [i.strip() for i in m.text.split(' ')]
+    flags = [i.strip() for i in m.text.split('--')]
     for f in flags:
-        if "" in f:
-            file_name_text = f[len(""):].strip().rsplit(".", 1)[0][:60]
-            caption = f[len(""):].strip().rsplit(".", 1)[0] + f"{file_extension}"
-            new_file_name = f"{file_name_text}{file_extension}"
+        if "file-name" in f:
+            file_name_text = f[len("file-name"):].strip().rsplit(".", 1)[0][:60]
+            caption = f[len("file-name"):].strip().rsplit(".", 1)[0] + ".mkv"
+            new_file_name = f"{file_name_text}.mkv"
+        if "change-title" in f:
+            title = f[len("change-title"):].strip()
+        if "change-video-title" in f:
+            video_title = f[len("change-video-title"):].strip()
+        if "change-audio-title" in f:
+            audio_title = f[len("change-audio-title"):].strip()
+        if "change-subtitle-title" in f:
+            subtitle_title = f[len("change-subtitle-title"):].strip()
     file_type = m.reply_to_message.video or m.reply_to_message.document
     if not file_type.mime_type.startswith("video/"):
         await m.reply_text("This is not a Video!", True)
