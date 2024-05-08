@@ -37,7 +37,7 @@ async def video_info_handler(c: Client, m: Message):
                                quote=True)
             return
     if (not m.reply_to_message) or (len(m.command) == 1):
-        await m.reply_text(f"**Reply to Document or Video with /{m.command[0]} `-n` new file name**", True)
+        await m.reply_text(f"**Reply to Document or Video with /{m.command[0]} `--n` new file name**", True)
         return
     title = (await db.get_title(m.from_user.id)) or "Telegram ~ @Star_Moviess_Tamil"
     video_title = (await db.get_title(m.from_user.id)) or "Telegram ~ @Star_Moviess_Tamil"
