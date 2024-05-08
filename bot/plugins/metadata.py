@@ -49,11 +49,11 @@ async def video_info_handler(c: Client, m: Message):
     if len(m.command) <= 1:
         return
 
-    flags = [i.strip() for i in m.text.split('-')]
+    flags = [i.strip() for i in m.text.split('--')]
     for f in flags:
-        if "name" in f:
-            file_name_text = f[len("name"):].strip().rsplit(".", 1)[0][:60]
-            caption = f[len("name"):].strip().rsplit(".", 1)[0] + f"{file_extension}"
+        if "n" in f:
+            file_name_text = f[len("n"):].strip().rsplit(".", 1)[0][:60]
+            caption = f[len("n"):].strip().rsplit(".", 1)[0] + f"{file_extension}"
             new_file_name = f"{file_name_text}{file_extension}"
         if "title" in f:
             title = f[len("title"):].strip()
