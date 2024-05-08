@@ -36,3 +36,19 @@ async def help_handler(c: Client, m: "types.Message"):
             types.InlineKeyboardButton("Show Settings ⚙️",
                                        callback_data="showSettings")]])
     )
+
+@Client.on_message(filters.command("settings") & filters.private)
+async def settings_handler(c: Client, m: "types.Message"):
+    if not m.from_user:
+        return await m.reply_text("**I don't know about you, sir.**")
+    await add_user_to_database(c, m)
+    mention = m.from_user.mention
+    await c.send_message(
+        chat_id=m.chat.id,
+        text=f"**Change ⚙️ Settings For {mention}**",
+        reply_markup=types.InlineKeyboardMarkup([[
+            types.InlineKeyboardButton("Show Settings ⚙️",
+                                       callback_data="showSettings")
+        ]])
+    )
+    
