@@ -35,6 +35,7 @@ async def video_info_handler(c: Client, m: Message):
     audio_title = (await db.get_title(m.from_user.id)) or "Telegram ~ @Star_Moviess_Tamil"
     subtitle_title = (await db.get_title(m.from_user.id)) or "Telegram ~ @Star_Moviess_Tamil"
     default_f_name = get_media_file_name(m.reply_to_message)
+    file_extension = os.path.splitext(default_f_name)[1]
     new_file_name = f"{default_f_name.rsplit('.', 1)[0][:60] if default_f_name else 'output'}.mkv"
     if len(m.command) <= 1:
         return
@@ -43,8 +44,8 @@ async def video_info_handler(c: Client, m: Message):
     for f in flags:
         if "name" in f:
             file_name_text = f[len("name"):].strip().rsplit(".", 1)[0][:60]
-            caption = f[len("name"):].strip().rsplit(".", 1)[0] + ".mkv"
-            new_file_name = f"{file_name_text}.mkv"
+            caption = f[len("name"):].strip().rsplit(".", 1)[0] + f"{file_extension}"
+            new_file_name = f"{file_name_text}{file_extension}"
         if "title" in f:
             title = f[len("title"):].strip()
         if "video" in f:
