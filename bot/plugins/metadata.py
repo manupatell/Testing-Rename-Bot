@@ -41,9 +41,9 @@ async def video_info_handler(c: Client, m: Message):
 
     flags = [i.strip() for i in m.text.split('-')]
     for f in flags:
-        if "n" in f:
-            file_name_text = f[len("n"):].strip().rsplit(".", 1)[0][:60]
-            caption = f[len("n"):].strip().rsplit(".", 1)[0] + ".mkv"
+        if "name" in f:
+            file_name_text = f[len("name"):].strip().rsplit(".", 1)[0][:60]
+            caption = f[len("name"):].strip().rsplit(".", 1)[0] + ".mkv"
             new_file_name = f"{file_name_text}.mkv"
         if "title" in f:
             title = f[len("title"):].strip()
