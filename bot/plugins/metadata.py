@@ -23,10 +23,19 @@ from bot.core.display import display_progress_for_pyrogram, convert
 from bot.core.file_info import get_file_attr
 from hachoir.metadata import extractMetadata
 from hachoir.parser import createParser
+from bot.core.handlers.time_gap import check_time_gap
 
 @Client.on_message(filters.command("edit_metadata") & filters.private)
 async def video_info_handler(c: Client, m: Message):
     await add_user_to_database(c, m)
+    if m.from_user.id not in Config.PRO_USERS:
+        is_in_gap, sleep_time = await check_time_gap(m.from_user.id)
+        if is_in_gap:
+            await m.reply_text("**Sorry Sir,\n**"
+                               "**No Flooding Allowed!\n\n**"
+                               f"**Send After `{str(sleep_time)}s` !!**",
+                               quote=True)
+            return
     if (not m.reply_to_message) or (len(m.command) == 1):
         await m.reply_text(f"**Reply to Document or Video with /{m.command[0]} `-n` new file name**", True)
         return
