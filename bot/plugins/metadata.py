@@ -57,7 +57,7 @@ async def video_info_handler(c: Client, m: Message):
     if not file_type.mime_type.startswith("video/"):
         await m.reply_text("This is not a Video!", True)
         return
-    editable = await m.reply_text("Downloading Video ...", quote=True)
+    editable = await m.reply_text("**Downloading Video...**", quote=True)
     dl_loc = Config.DOWNLOAD_DIR + "/" + str(m.from_user.id) + "/"
     root_dl_loc = dl_loc
     if not os.path.isdir(dl_loc):
@@ -68,16 +68,16 @@ async def video_info_handler(c: Client, m: Message):
         file_name=dl_loc,
         progress=display_progress_for_pyrogram,
         progress_args=(
-            "Downloading ...",
+            "**Downloading...**",
             editable,
             c_time
         )
     )
-    await editable.edit("Trying to Fetch Media Metadata ...")
+    await editable.edit("**Trying to Fetch Media Metadata...**")
     output = await execute(f"ffprobe -hide_banner -show_streams -print_format json {shlex.quote(the_media)}")
     if not output:
         await rm_dir(root_dl_loc)
-        return await editable.edit("Can't fetch media info!")
+        return await editable.edit("**Can't Fetch Media info!**")
 
     try:
         details = json.loads(output[0])
@@ -95,12 +95,12 @@ async def video_info_handler(c: Client, m: Message):
         if not os.path.isdir(dl_loc):
             os.makedirs(dl_loc)
         middle_cmd += f" {shlex.quote(dl_loc + new_file_name)}"
-        await editable.edit("Please Wait ...\n\nProcessing Video ...")
+        await editable.edit("**Please Wait ...\n\nProcessing Video...**")
         await execute(middle_cmd)
-        await editable.edit("Renamed Successfully!")
+        await editable.edit("**Renamed Successfully!**")
     except:
         # Clean Up
-        await editable.edit("Failed to process video!")
+        await editable.edit("**Failed to Process Video!**")
         await rm_dir(root_dl_loc)
         return
     try: os.remove(the_media)
@@ -132,7 +132,7 @@ async def video_info_handler(c: Client, m: Message):
             thumb=_default_thumb_ or None
         )
     await rm_dir(root_dl_loc)
-    await editable.edit("Upload Successfully..!")
+    await editable.edit("**Upload Successfully..!**")
 
 # Remove Audios
 @Client.on_message(filters.command("remove") & filters.private)
