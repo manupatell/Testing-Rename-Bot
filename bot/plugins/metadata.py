@@ -14,7 +14,6 @@ from bot.core.file_info import (
     get_media_file_size,
     get_media_file_name
 )
-from bot.core.handlers.time_gap import check_time_gap
 from bot.core.db.database import db
 from bot.core.utils.rm import rm_dir
 from bot.core.utils.executor import execute
@@ -23,13 +22,12 @@ from bot.core.display import display_progress_for_pyrogram, convert
 from bot.core.file_info import get_file_attr
 from hachoir.metadata import extractMetadata
 from hachoir.parser import createParser
-from bot.core.handlers.time_gap import check_time_gap
 
 @Client.on_message(filters.command("edit_metadata") & filters.private)
 async def video_info_handler(c: Client, m: Message):
     await add_user_to_database(c, m)
     if (not m.reply_to_message) or (len(m.command) == 1):
-        await m.reply_text(f"**Reply to Document or Video with /{m.command[0]} `--n` new file name**", True)
+        await m.reply_text(f"**Reply to Document or Video with** /{m.command[0]} `--n` new file name.mkv", True)
         return
     title = (await db.get_title(m.from_user.id)) or "Telegram ~ @Star_Moviess_Tamil"
     video_title = (await db.get_title(m.from_user.id)) or "Telegram ~ @Star_Moviess_Tamil"
