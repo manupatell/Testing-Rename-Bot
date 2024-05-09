@@ -27,7 +27,7 @@ from hachoir.parser import createParser
 async def video_info_handler(c: Client, m: Message):
     await add_user_to_database(c, m)
     if (not m.reply_to_message) or (len(m.command) == 1):
-        await m.reply_text(f"**Reply to Document or Video with** /{m.command[0]} `--n` new file name.mkv", True)
+        await m.reply_text(f"**Reply to Document or Video with** `/{m.command[0]} --n new file name.mkv`", True)
         return
     title = (await db.get_title(m.from_user.id)) or "Telegram ~ @Star_Moviess_Tamil"
     video_title = (await db.get_title(m.from_user.id)) or "Telegram ~ @Star_Moviess_Tamil"
